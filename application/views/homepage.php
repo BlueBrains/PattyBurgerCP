@@ -50,7 +50,7 @@
 													<select name="type">
 														<?php if(isset($record)&&is_array($record)):?>
 														<?php foreach ($record as $rows):?>
-														 <option value="<?php echo $rows->id ?>"> <?php echo $rows->name?></option>
+														 <option value="<?php echo $rows->id ?>" > <?php echo $rows->name?></option>
 														<?php endforeach;?>
 														<?php endif;?>
 													</select>

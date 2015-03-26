@@ -34,6 +34,7 @@ class Migration_resturant extends CI_Migration{
 			'type_id'=>array(
 				'type'=>'int',
 				'constraint'=>11,
+				'default'=>1
 			),
 			'phone1'=>array(
 				'type'=>'varchar',
