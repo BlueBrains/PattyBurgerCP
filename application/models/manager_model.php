@@ -23,6 +23,7 @@ class manager_model extends CI_Model {
 					$ext=explode(".",strtolower($_FILES['fic']['name']));
 		 			$extension=array_pop($ext);
 				 	$file_name =$r.".".$extension;
+					echo $_FILES['fic']['name']."ffffffffff".$file_name."54545".$extension;
 				    $file_size =$_FILES['fic']['size'];
 				    $file_tmp =$_FILES['fic']['tmp_name'];
 				    $file_type=$_FILES['fic']['type'];
@@ -63,11 +64,11 @@ class manager_model extends CI_Model {
 	function delete_res($id)
 	{
 			$this->db->trans_begin();
-				$q=$this->db->query("SELECT * FROM restaurant WHERE id = '".$id."'");
+				$sql=$this->db->query("SELECT * FROM restaurant WHERE id = '".$id."'");
 				foreach ($sql->result() as $raw ) {
 					$data[]=$raw;
 				}
-				
+				$this->db->query("DELETE FROM restaurant WHERE id = '".$id."'");
 				$files = glob(realpath($_SERVER['DOCUMENT_ROOT'])."\\burger_ownercp\\upload\\*"); // get all file names
 				foreach($files as $file){ // iterate files
 				  if(is_file($file) && ($file == realpath($_SERVER["DOCUMENT_ROOT"])."\\burger_ownercp\\upload\\".$data[0]->res_logo))
@@ -75,7 +76,7 @@ class manager_model extends CI_Model {
 					unlink($file); // delete file
 				}
 				
-				$this->db->query("DELETE FROM restaurant WHERE id = '".$id."'");
+				
 				
 			if ($this->db->trans_status() === FALSE)
 					 {

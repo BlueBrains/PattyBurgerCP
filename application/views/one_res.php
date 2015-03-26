@@ -25,10 +25,10 @@
 						<div class="form-group" style="direction: rtl;">
 							<label >رقم الهاتف3</label>
 							<input type="text" class="form-control" name="phone3" id="phone3" value="<?php echo $row->phone3?>" disabled>
-						</div>
+						</div><!--
 						<div class="form-group">
 							 <img  style="height: 130px;"class="img-thumbnail" src="<?php echo base_url()."upload/".$row->res_logo?>" alt="">
-					   </div>
+					   </div>-->
 					</div>
 					<div class="col-lg-6">
 						<div class="form-group">
