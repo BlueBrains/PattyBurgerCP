@@ -4,47 +4,47 @@ class res extends REST_Controller {
 	
 	function __construct() {
 		parent::__construct();
-		$this->load->model('album_model');
-		$this->load->model('site_model');
-		$this->load->library('session');
-		$this->load->model('coral_model');
-		$this->load->library('pagination');
-		$this->load->model('manager_model');
+		$this->load->model('api_model');
 		 header('Content-Type: text/html; charset=utf-8');
 	}
 	
-	function add_user()
-	{
-		$this->manager_model->add_user();
-		redirect('site/manager');
-	}
-	
-	function update_user()
-	{
-		$this->manager_model->update_user($_POST['hid']);
-		redirect('site/manager');
-	}
-	
-	function get_user()
+	function index_get()
 	{
 		
-		$content=$this->input->post('type');
-		$id=$this->input->post('id');
-
-		$this->coral_model->save_change($content,$id);
-		$info=$this->manager_model->get_user($_POST['admins_name']);
-		$data['user_name']=$info[0]->user_name;
-		$data['user_pass']=$info[0]->password;
-		$data['user_id']=$info[0]->id;
-		$data['user_pre']=$this->manager_model->get_user_pre($_POST['admins_name']);
-		$data['main_content']='edit_manager';
-		$data['side_bar_news']=$this->coral_model->get_news();
-		$this->load->view('includes/template',$data);
 	}
 	
-	function delete_user($id){
-		$this->manager_model->delete_user($id);
-		redirect('site/manager');
+	function add_get()
+	{
+	for($i=0;$i<15;$i++){
+		$new_insert_data = array(
+			'res_name'=> "koko".$i,
+			'user_id'=>$i,
+			'res_address'=>"address".$i,
+			'type_id'=>2,
+			);				
+			
+			$insert = $this->db->insert('restaurant', $new_insert_data);
+			}
 	}
 	
+	function get_res_get()
+	{
+		
+		//$this->response($this->api_model->res());
+		 $data = $this->api_model->res();
+		 echo json_encode($data);
+		 $this->response($data,200);
+		// echo json_encode($data);
+		 /*$r['res']=urldecode(stripslashes($r['res']));
+        $this->response($r);
+		//$data=$this->api_model->view_res($this->get('id'));
+		/*$data=$this->api_model->res();
+		if($this->response->format == 'html'){
+		 echo "html";
+		}
+		else 
+		  //$this->response($data,200);
+		  echo json_encode($data);*/
+		  
+	}
 }
