@@ -31,8 +31,8 @@ class res extends REST_Controller {
 	{
 		
 		//$this->response($this->api_model->res());
-		 $data = $this->api_model->res();
-		 echo json_encode($data);
+		$this->load->helper("json_helper");
+		 $data = objectToArray($this->api_model->res());
 		 $this->response($data,200);
 		// echo json_encode($data);
 		 /*$r['res']=urldecode(stripslashes($r['res']));
