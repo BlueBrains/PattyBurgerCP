@@ -16,6 +16,9 @@ class Migration_resturant extends CI_Migration{
 				'constraint'=>11,
 				'unsigned' => TRUE,
 			),
+			'description'=>array(
+				'type'=>'text',
+			),
 			'res_name'=>array(
 				'type'=>'varchar',
 				'constraint'=>255,

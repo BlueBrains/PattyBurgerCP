@@ -5,7 +5,7 @@ class api_model extends CI_Model {
 	
 	function res()
 	{
-		$sql=$this->db->query("SELECT res_name,res_address  FROM restaurant ");
+		$sql=$this->db->query("SELECT *  FROM restaurant ");
 				foreach ($sql->result() as $raw ) {
 					$data[]=$raw;
 				}
