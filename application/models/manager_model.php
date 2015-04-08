@@ -23,7 +23,7 @@ class manager_model extends CI_Model {
 					$ext=explode(".",strtolower($_FILES['fic']['name']));
 		 			$extension=array_pop($ext);
 				 	$file_name =$r.".".$extension;
-					echo $_FILES['fic']['name']."ffffffffff".$file_name."54545".$extension;
+				
 				    $file_size =$_FILES['fic']['size'];
 				    $file_tmp =$_FILES['fic']['tmp_name'];
 				    $file_type=$_FILES['fic']['type'];
@@ -188,6 +188,116 @@ class manager_model extends CI_Model {
 	function delete_type($id)
 	{
 		$this->db->query("DELETE FROM types WHERE id = '".$id."'");
+	}
+
+	function get_lists()
+	{
+		$sql=$this->db->query("SELECT * FROM lists");
+				foreach ($sql->result() as $raw ) {
+					$data[]=$raw;
+				}
+		if ($sql->num_rows > 0)
+           { 
+			 return $data; 
+		}
+		else {
+			$f=FALSE;	
+			return $f;
+		}	
+	}
+	
+	function get_mlists($id)
+	{
+		$sql=$this->db->query("SELECT * FROM lists inner join list_res on list_res.list_id = id where res_id='".$id."'");
+				foreach ($sql->result() as $raw ) {
+					$data[]=$raw;
+				}
+		if ($sql->num_rows > 0)
+           { 
+			 return $data; 
+		}
+		else {
+			$f=FALSE;	
+			return $f;
+		}	
+	}
+	
+	function get_meals($id)
+	{
+		
+	}
+	
+	function add_list()
+	{
+		$this->db->trans_begin();
+		$new_insert_data = array(
+			'lists_name'=> $this->input->post('listname')
+			);				
+			$insert = $this->db->insert('lists', $new_insert_data);
+			$r=mysql_insert_id();
+		$new_insert_data1 = array(
+			'list_id'=> $r,
+			'res_id'=> 1 //session
+			
+			);				
+			$insert = $this->db->insert('list_res', $new_insert_data1);
+			
+			
+		if ($this->db->trans_status() === FALSE)
+					 {
+						$this->db->trans_rollback();
+					 }
+					 else
+					 {
+						$this->db->trans_commit();
+					 }		
+			
+	}
+	
+	function add_meal()
+	{
+		$this->db->trans_begin();
+
+		$new_insert_data = array(
+			'list_id'=> $this->input->post('meal_list'),
+			'meal_name'=>  $this->input->post('meal_name'),
+			'meal_price'=>  $this->input->post('meal_price'),
+			'meal_discount'=>  $this->input->post('meal_discount'),
+			'meal_description'=>  $this->input->post('meal_description')
+			);				
+			$insert = $this->db->insert('meal', $new_insert_data);
+			$r=mysql_insert_id();
+		if(!empty($_FILES['fic']['name']))
+			{
+					$ext=explode(".",strtolower($_FILES['fic']['name']));
+		 			$extension=array_pop($ext);
+				 	
+					$file_name =$r.".".$extension;
+					echo $file_name;
+				    $file_size =$_FILES['fic']['size'];
+				    $file_tmp =$_FILES['fic']['tmp_name'];
+				    $file_type=$_FILES['fic']['type'];
+					$path=getcwd();
+					if (!file_exists ($path."\\uploads\\res1\\mealimg"/*session*/))
+						mkdir($path."\\uploads\\res1\\mealimg"/*session*/,0777,TRUE);
+					$location=realpath($_SERVER['DOCUMENT_ROOT'])."\\burger_ownercp\\uploads\\res1\\mealimg\\"/*session*/.$file_name;
+	        	 	move_uploaded_file($file_tmp, $location);
+					$d = $this->compress($location, $location, 30);
+					
+					$q="UPDATE meal SET meal_img=? where id='".$r."' ";
+		   
+		            $sql=$this->db->query($q,$file_name);
+			}
+		
+			
+		if ($this->db->trans_status() === FALSE)
+					 {
+						$this->db->trans_rollback();
+					 }
+					 else
+					 {
+						$this->db->trans_commit();
+					 }		
 	}
 	
 	function compress($source, $destination, $quality) {

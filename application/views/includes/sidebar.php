@@ -13,7 +13,19 @@
                         <i class="icon-table"></i> إضافة / تعديل أنواع المطاعم
                     </a>                   
                 </li>
+				
+				<li class="panel">
+                    <a href="<?php echo base_url();?>manager/edit_branches/id/1" >
+                        <i class="icon-table"></i> إضافة / تعديل فروع المطعم
+                    </a>                   
+                </li>
 
+				<li class="panel">
+                    <a href="<?php echo base_url();?>manager/edit_meals/id/1" >
+                        <i class="icon-table"></i> إضافة / تعديل الوجبات
+                    </a>                   
+                </li>
+				
                 <li class="panel ">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
                         <i class="icon-tasks"> </i> إدارة المطاعم   
@@ -24,7 +36,6 @@
                     </a>
                     <ul class="collapse" id="component-nav">
                         <li class=""><a href="<?php echo base_url();?>manager/edit_resturants"><i class="icon-angle-right"></i> قبول / إلغاء تفعيل المطعم </a></li>
-						<li class=""><a href="<?php echo base_url();?>dashboard/add_branches"><i class="icon-angle-right"></i> إضافة فروع للمطاعم </a></li>
                     </ul>
                 </li>
             </ul>

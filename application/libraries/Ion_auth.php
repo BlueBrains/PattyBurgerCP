@@ -2,8 +2,6 @@
 /**
 * Name:  Ion Auth
 *
-* Version: 2.5.2
-*
 * Author: Ben Edmunds
 *		  ben.edmunds@gmail.com
 *         @benedmunds
@@ -63,8 +61,6 @@ class Ion_auth
 		$this->load->library('email');
 		$this->lang->load('ion_auth');
 		$this->load->helper('cookie');
-		$this->load->helper('language');
-		$this->load->helper('url');
 
 		// Load the session, CI2 as a library, CI3 uses it as a driver
 		if (substr(CI_VERSION, 0, 1) == '2')
@@ -144,11 +140,10 @@ class Ion_auth
 		if ( $this->ion_auth_model->forgotten_password($identity) )   //changed
 		{
 			// Get user information
-            $user = $this->where($this->config->item('identity', 'ion_auth'), $identity)->where('active', 1)->users()->row();  //changed to get_user_by_identity from email
+			$user = $this->where($this->config->item('identity', 'ion_auth'), $identity)->users()->row();  //changed to get_user_by_identity from email
 
 			if ($user)
 			{
-				
 				$data = array(
 					'identity'		=> $user->{$this->config->item('identity', 'ion_auth')},
 					'forgotten_password_code' => $user->forgotten_password_code
@@ -156,13 +151,11 @@ class Ion_auth
 
 				if(!$this->config->item('use_ci_email', 'ion_auth'))
 				{
-					echo "string";
 					$this->set_message('forgot_password_successful');
 					return $data;
 				}
 				else
 				{
-					echo "elseeee";
 					$message = $this->load->view($this->config->item('email_templates', 'ion_auth').$this->config->item('email_forgot_password', 'ion_auth'), $data, true);
 					$this->email->clear();
 					$this->email->from($this->config->item('admin_email', 'ion_auth'), $this->config->item('site_title', 'ion_auth'));
@@ -298,26 +291,21 @@ class Ion_auth
 	 **/
 	public function register($username, $password, $email, $additional_data = array(), $group_ids = array()) //need to test email activation
 	{
-	
 		$this->ion_auth_model->trigger_events('pre_account_creation');
 
-		//$email_activation = $this->config->item('email_activation', 'ion_auth');
-		$email_activation=0;
+		$email_activation = $this->config->item('email_activation', 'ion_auth');
+
 		if (!$email_activation)
 		{
-			echo "amerrrrrrrrrrrrrr";
 			$id = $this->ion_auth_model->register($username, $password, $email, $additional_data, $group_ids);
-			echo "id     ".$id."</br>";
 			if ($id !== FALSE)
 			{
-				
 				$this->set_message('account_creation_successful');
 				$this->ion_auth_model->trigger_events(array('post_account_creation', 'post_account_creation_successful'));
 				return $id;
 			}
 			else
 			{
-			
 				$this->set_error('account_creation_unsuccessful');
 				$this->ion_auth_model->trigger_events(array('post_account_creation', 'post_account_creation_unsuccessful'));
 				return FALSE;
@@ -326,10 +314,9 @@ class Ion_auth
 		else
 		{
 			$id = $this->ion_auth_model->register($username, $password, $email, $additional_data, $group_ids);
-	
+
 			if (!$id)
 			{
-			
 				$this->set_error('account_creation_unsuccessful');
 				return FALSE;
 			}
@@ -413,10 +400,6 @@ class Ion_auth
 		if (substr(CI_VERSION, 0, 1) == '2')
 		{
 			$this->session->sess_create();
-		}
-		else
-		{
-			$this->session->sess_regenerate(TRUE);
 		}
 
 		$this->set_message('logout_successful');

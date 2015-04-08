@@ -125,7 +125,7 @@ xmlhttp.open("GET",base_url+controller+"/delete_res/id/"+str,true);
 											<tr>								
 												<td><?php echo $row->res_name;?></td>
 												<td><?php echo $row->res_address;?></td>
-												<td><?php echo $row->phone1;?></td>
+												<td><?php echo $row->num;?></td>
 												<td><input type="button" class="btn btn-info" onclick="view_details(<?php echo  $row->id ;?>)" value="استعراض">
 												<?php if($row->accept==0):?>
 													<input type="button" class="btn btn-success" onclick="active(<?php echo  $row->id ;?>)" value="تفعيل">

@@ -94,11 +94,37 @@ class manager extends REST_Controller {
 	
 	function add_branches_get()
 	{
-		
+		$data['record'] =$this->manager_model->get_myres($this->get('id'));
+		$data['main_content'] = 'edit_branches';	
+		$this->load->view('includes/template',$data);
 	}
 	
 	function add_branches_post()
 	{
 		
 	}
+	
+	function edit_meals_get()
+	{
+		$data['record'] =$this->manager_model->get_lists();
+		$data['record1']=$this->manager_model->get_mlists($this->get('id'));
+		$data['main_content'] = 'edit_meals';	
+		$this->load->view('includes/template',$data);
+	}
+	
+	function edit_meals_post()
+	{
+		$this->manager_model->add_list();
+		$data['record'] =$this->manager_model->get_lists();
+		$data['record1']=$this->manager_model->get_mlists($this->get('id'));
+		$data['main_content'] = 'edit_meals';	
+		$this->load->view('includes/template',$data);
+	}
+	
+	function add_new_meals_post()
+	{
+		$this->manager_model->add_meal();
+		//redirect('manager/edit_meals/id/1');//session);
+	}
+	
 }
