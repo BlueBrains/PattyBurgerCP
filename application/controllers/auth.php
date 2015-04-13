@@ -8,7 +8,7 @@ class Auth extends CI_Controller {
 		$this->load->library('ion_auth');
 		$this->load->library('form_validation');
 		$this->load->helper('url');
-
+		$this->load->model('log_model');
 		// Load MongoDB library instead of native db driver if required
 		$this->config->item('use_mongodb', 'ion_auth') ?
 		$this->load->library('mongo_db') :
@@ -68,10 +68,20 @@ class Auth extends CI_Controller {
 
 			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember))
 			{
-				//if the login is successful
+				
 				//redirect them back to the home page
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
-				redirect('/', 'refresh');
+				if($this->ion_auth->logged_in() && $this->ion_auth->is_admin())
+					redirect('/', 'refresh');
+				else 
+					{
+						$is_res=array('res_id'=>$this->log_model->is_res($this->session->userdata('user_id')));
+						$this->session->set_userdata($is_res);
+						if($is_res['res_id'])
+							redirect('rest_admin/index/id/'.$is_res['res_id']);
+						else
+							redirect('rest_admin/add_res');
+					}
 			}
 			else
 			{

@@ -1,4 +1,11 @@
-﻿  <div class="row" style="text-align : right">
+﻿<?php if(isset($note)):?>
+<div class="alert alert-<?php echo $class?> alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+	<?php echo $note?>.
+</div>
+<?php endif;?>
+  <div class="row" style="text-align : right">
+  
   <div class="col-lg-6">
 <h1>
                          التحكم بقوائم الطعام
@@ -10,14 +17,14 @@
 							<center>
 								<div class="panel-body" style="width : 90%">
 								<div class="row">
-									<form action ="<?php echo base_url()?>manager/edit_meals" method="get">
+									<form action ="<?php echo base_url()?>rest_admin/edit_list" method="post">
 										<label>اختر القائمة </label>
 										<div class="row">
 										
 										<div class="col-lg-6">
 												<div class="form-group" style="direction: rtl;">
 													<label >تعديل قائمة الوجبات</label>
-													<select class="form-control chzn-select" name="type">
+													<select class="form-control chzn-select" name="list_type">
 														<?php if(isset($record1)&&is_array($record1)):?>
 														<?php foreach ($record1 as $rows):?>
 														 <option value="<?php echo $rows->id ?>" > <?php echo $rows->lists_name?></option>
@@ -26,13 +33,14 @@
 													</select>
 												</div>
 										</div>
+										<input type="hidden" value="<?php echo $this->session->userdata('res_id');?>" name='id'>
 											<div class="col-lg-6"><button type="submit" class="btn btn-success">الانتقال إلى القائمة </button></div>
 										</div>	
 									</form>
 									</div>
 									<hr>
 									
-									<form action ="<?php echo base_url()?>manager/edit_meals" method="post">
+									<form action ="<?php echo base_url()?>rest_admin/add_list" method="post">
 										<div class="row">
 										<div class="col-lg-6">
 											    <div class="form-group" style="direction: rtl;">
@@ -69,7 +77,7 @@
                             </div>
 							<center>
 								<div class="panel-body" style="width : 90%">
-									<form enctype="multipart/form-data" action ="<?php echo base_url()?>manager/add_new_meals" method="post">
+									<form enctype="multipart/form-data" action ="<?php echo base_url()?>rest_admin/edit_meals" method="post">
 										<div class="row">
 											<div class="form-group" style="direction: rtl;">
 													<label >اسم الوجبة</label>
@@ -112,7 +120,7 @@
 											
 											<div class="row">
 											<center>
-												
+											<input type="hidden" value="<?php echo $this->session->userdata('res_id');?>" name='id'>	
 											<p style="direction:rtl;">
 
 											<button type="submit" class="btn btn-success">إضافة الوجبة</button>

@@ -1,45 +1,46 @@
-<h1><?php echo lang('edit_user_heading');?></h1>
+<div id="content" class="container">
 <p><?php echo lang('edit_user_subheading');?></p>
 
-<div id="infoMessage"><?php echo $message;?></div>
+<?php if(!empty($message)) echo '<div id="infoMessage" class="alert alert-warning"><i class="fa fa-warning"></i> '.$message.'</div>';?>
 
 <?php echo form_open(uri_string());?>
 
-      <p>
-            <?php echo lang('edit_user_fname_label', 'first_name');?> <br />
-            <?php echo form_input($first_name);?>
-      </p>
+      <div class="form-group">
+            <?php echo form_label($this->lang->line('edit_user_fname_label'), 'first_name', array('class' => 'col-sm-2 control-label'));?> 
+          <div class="col-sm-3"><?php echo form_input($first_name, NULL, 'class="form-control"');?></div>
+      </div>
 
-      <p>
-            <?php echo lang('edit_user_lname_label', 'last_name');?> <br />
-            <?php echo form_input($last_name);?>
-      </p>
+      <div class="form-group">
+            <?php echo form_label($this->lang->line('edit_user_lname_label'), 'last_name', array('class' => 'col-sm-2 control-label'));?>
+            <div class="col-sm-3"><?php echo form_input($last_name, NULL, 'class="form-control"');?></div>
+      </div>
 
-      <p>
-            <?php echo lang('edit_user_company_label', 'company');?> <br />
-            <?php echo form_input($company);?>
-      </p>
+      <div class="form-group">
+            <?php echo form_label($this->lang->line('edit_user_phone_label'), 'phone', array('class' => 'col-sm-2 control-label'));?> 
+            <div class="col-sm-3"><?php echo form_input($phone, NULL, 'class="form-control"');?></div>
+      </div>
+    
+      <div class="form-group">
+            <?php echo form_label($this->lang->line('edit_user_email_label'), 'email', array('class' => 'col-sm-2 control-label'));?> 
+            <div class="col-sm-3"><?php echo form_input($email, NULL, 'class="form-control"');?></div>
+      </div>
+    
+      <div class="form-group">
+            <?php echo form_label($this->lang->line('edit_user_password_label'), 'password', array('class' => 'col-sm-2 control-label'));?> 
+            <div class="col-sm-3"><?php echo form_input($password, NULL, 'class="form-control"');?></div>
+      </div>
 
-      <p>
-            <?php echo lang('edit_user_phone_label', 'phone');?> <br />
-            <?php echo form_input($phone);?>
-      </p>
+      <div class="form-group">
+            <?php echo form_label($this->lang->line('edit_user_password_confirm_label'), 'password_confirm', array('class' => 'col-sm-2 control-label'));?>
+            <div class="col-sm-3"><?php echo form_input($password_confirm, NULL, 'class="form-control"');?></div>
+      </div>
 
-      <p>
-            <?php echo lang('edit_user_password_label', 'password');?> <br />
-            <?php echo form_input($password);?>
-      </p>
-
-      <p>
-            <?php echo lang('edit_user_password_confirm_label', 'password_confirm');?><br />
-            <?php echo form_input($password_confirm);?>
-      </p>
-
-	 <h3><?php echo lang('edit_user_groups_heading');?></h3>
+	 <h3><?php echo $this->lang->line('edit_user_groups_heading');?></h3>
 	<?php foreach ($groups as $group):?>
-	<label class="checkbox">
+	<div class="checkbox">
 	<?php
 		$gID=$group['id'];
+		echo $gID;
 		$checked = null;
 		$item = null;
 		foreach($currentGroups as $grp) {
@@ -48,15 +49,18 @@
 			break;
 			}
 		}
-	?>
+                ?><label>
 	<input type="checkbox" name="groups[]" value="<?php echo $group['id'];?>"<?php echo $checked;?>>
-	<?php echo $group['name'];?>
-	</label>
+	<?php echo $group['name'];?></label>
+	</div>
 	<?php endforeach?>
 
       <?php echo form_hidden('id', $user->id);?>
       <?php echo form_hidden($csrf); ?>
 
-      <p><?php echo form_submit('submit', lang('edit_user_submit_btn'));?></p>
+      <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10"><?php echo form_submit(array('name' => 'submit', 'value' => 'Save', 'class' => 'btn btn-primary btn-large'));?></div>
+      </div>
 
 <?php echo form_close();?>
+

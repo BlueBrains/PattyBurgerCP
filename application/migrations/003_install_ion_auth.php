@@ -131,7 +131,7 @@ class Migration_Install_ion_auth extends CI_Migration {
 				'type' => 'VARCHAR',
 				'constraint' => '20',
 				'null' => TRUE
-			)
+			),
 
 		));
 		$this->dbforge->add_key('id', TRUE);

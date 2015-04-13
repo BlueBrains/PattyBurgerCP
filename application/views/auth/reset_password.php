@@ -1,22 +1,30 @@
+<?php $this->load->view('_blocks/header'); ?>
+<div id="content" class="container">
 <h1><?php echo lang('reset_password_heading');?></h1>
 
-<div id="infoMessage"><?php echo $message;?></div>
+<?php if(!empty($message)) echo '<div id="infoMessage" class="alert alert-warning"><i class="fa fa-warning"></i> '.$message.'</div>';?>
 
-<?php echo form_open('auth/reset_password/' . $code);?>
+<?php echo form_open('auth/reset_password/' . $code, array('class' => 'form-horizontal'));?>
 
-	<p>
-		<label for="new_password"><?php echo sprintf(lang('reset_password_new_password_label'), $min_password_length);?></label> <br />
-		<?php echo form_input($new_password);?>
-	</p>
+	<div class="form-group">
+		<label class="col-sm-2"  for="new_password"><?php echo sprintf(lang('reset_password_new_password_label'), $min_password_length);?></label>
+                <div class="col-sm-10"><?php echo form_input($new_password, NULL, 'class="form-control"');?></div>
+	</div>
 
-	<p>
-		<?php echo lang('reset_password_new_password_confirm_label', 'new_password_confirm');?> <br />
-		<?php echo form_input($new_password_confirm);?>
-	</p>
+	<div class="form-group">
+            <label class="col-sm-2"><?php echo lang('reset_password_new_password_confirm_label', 'new_password_confirm');?></label> 
+		<div class="col-sm-10"><?php echo form_input($new_password_confirm, NULL, 'class="form-control"');?></div>
+	</div>
 
 	<?php echo form_input($user_id);?>
 	<?php echo form_hidden($csrf); ?>
 
-	<p><?php echo form_submit('submit', lang('reset_password_submit_btn'));?></p>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <?php echo form_submit(array('name' => 'submit', 'id' => 'submitter', 'class' => 'btn btn-primary btn-large', 'value' => 'Reset'));?>
+            </div>
+        </div>
 
 <?php echo form_close();?>
+
+<?php $this->load->view('_blocks/footer'); ?>
