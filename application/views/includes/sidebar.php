@@ -1,7 +1,7 @@
  <!-- MENU SECTION -->
        <div id="left">
             <ul id="menu" class="collapse">
-
+			<?php if($this->ion_auth->logged_in() && $this->ion_auth->is_admin()): ?>
 				<li class="panel">
                     <a href="<?php echo base_url();?>manager" >
                         <i class="icon-table"></i> الرئيسية
@@ -13,20 +13,7 @@
                         <i class="icon-table"></i> إضافة / تعديل أنواع المطاعم
                     </a>                   
                 </li>
-				
-				<li class="panel">
-                    <a href="<?php echo base_url();?>manager/edit_branches/id/1" >
-                        <i class="icon-table"></i> إضافة / تعديل فروع المطعم
-                    </a>                   
-                </li>
-
-				<li class="panel">
-                    <a href="<?php echo base_url();?>manager/edit_meals/id/1" >
-                        <i class="icon-table"></i> إضافة / تعديل الوجبات
-                    </a>                   
-                </li>
-				
-                <li class="panel ">
+				<li class="panel ">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
                         <i class="icon-tasks"> </i> إدارة المطاعم   
 	   
@@ -38,6 +25,21 @@
                         <li class=""><a href="<?php echo base_url();?>manager/edit_resturants"><i class="icon-angle-right"></i> قبول / إلغاء تفعيل المطعم </a></li>
                     </ul>
                 </li>
+			<?php endif; ?>
+			<?php if($this->ion_auth->logged_in() && !$this->ion_auth->is_admin()): ?>
+				<li class="panel">
+                    <a href="<?php echo base_url();?>rest_admin/add_branches/id/<?php echo $this->session->userdata('res_id')?>" >
+                        <i class="icon-table"></i> إضافة / تعديل فروع المطعم
+                    </a>                   
+                </li>
+
+				<li class="panel">
+                    <a href="<?php echo base_url();?>rest_admin/edit_meals/id/<?php echo $this->session->userdata('res_id')?>" >
+                        <i class="icon-table"></i> إضافة / تعديل الوجبات
+                    </a>                   
+                </li>
+			<?php endif; ?>	
+                
             </ul>
 
         </div>

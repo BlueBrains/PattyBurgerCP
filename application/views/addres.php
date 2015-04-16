@@ -1,30 +1,21 @@
+<?php $this->load->view('includes/header.php');  ?>
+	 <!--PAGE CONTENT -->
+        <div id="content">
 
+            <div class="inner" style="min-height:1200px;">
+                <div class="row">
+                    <div class="col-lg-12">
             <div class="inner" style="min-height:1200px;">
                 <div class="row">
  <div class="col-lg-12">
 						
 						<div class="panel panel-primary" >
                             <div class="panel-heading">
-                                <h3 class="panel-title"> إضافة مطعم جديد</h3>
+                                <h3 class="panel-title"> قم بإضافة محلك هنا</h3>
                             </div>
 							<center>
 								<div class="panel-body" style="width : 90%">
 									<form enctype="multipart/form-data" action ="<?php echo base_url()?>manager/singup" method="post">
-										<div class="row">
-											<div class="form-group" style="direction: rtl;">
-													<label >اسم المستخدم</label>
-													<input type="text" class="form-control" name="username" id="user" value="" placeholder="اسم المستخدم">
-												</div>
-												<div class="form-group" style="direction: rtl;">
-													<label >الحساب الالكتروني</label>
-													<input type="text" class="form-control" name="email" id="email" value="" placeholder="بريدك الالكتروني">
-												</div>
-												<div class="form-group" style="direction: rtl;">
-													<label >رمز المرور</label>
-													<input type="password" class="form-control" name="password" id="password" value="" placeholder="أكثر من 8 محارف أو أرقام">
-												</div>
-										</div>
-										<hr>
 										<div class="row">
 											<div class="col-lg-6">
 											    <div class="form-group" style="direction: rtl;">
@@ -89,3 +80,21 @@
 
 
             </div>
+	
+                    </div>
+                </div>
+
+            
+
+
+
+
+            </div>
+
+
+
+
+        </div>
+       <!--END PAGE CONTENT -->
+
+<?php $this->load->view('includes/footer.php');  ?>
