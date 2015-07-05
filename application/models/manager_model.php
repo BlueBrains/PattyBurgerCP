@@ -68,6 +68,7 @@ class manager_model extends CI_Model {
 				foreach ($sql->result() as $raw ) {
 					$data[]=$raw;
 				}
+				/* delete meals and lists and unlink meals*/
 				$this->db->query("DELETE FROM restaurant WHERE id = '".$id."'");
 				$files = glob(realpath($_SERVER['DOCUMENT_ROOT'])."\\burger_ownercp\\upload\\*"); // get all file names
 				foreach($files as $file){ // iterate files

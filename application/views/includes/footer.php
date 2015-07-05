@@ -1,25 +1,49 @@
-</div>
-
-     <!--END MAIN WRAPPER -->
-
-   <!-- FOOTER -->
-    <div id="footer">
-        <p>&copy;  binarytheme &nbsp;2014 &nbsp;</p>
-    </div>
-    <!--END FOOTER -->
-     <!-- GLOBAL SCRIPTS -->
-    <script src="<?php echo base_url();?>assets/plugins/jquery-2.0.3.min.js"></script>
-     <script src="<?php echo base_url();?>assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-    <script src="<?php echo base_url();?>assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-    <!-- END GLOBAL SCRIPTS -->
+	  <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+          <b>Version</b> 2.0
+        </div>
+        <strong>Copyright &copy; 2014-2015 <a href="#">Luay AL Assadi</a>.</strong> All rights reserved.
+      </footer>
+	        <div class='control-sidebar-bg'></div>
+    </div><!-- ./wrapper -->
 	
-<script src="<?php echo base_url()?>assets/plugins/jasny/js/bootstrap-fileupload.js"></script>
-	 
-	     <script src="<?php echo base_url()?>assets/plugins/jquery.fancybox-1.3.4/jquery-1.4.3.min.js"></script> <!--important for gallery-->
-     <script src="<?php echo base_url()?>assets/plugins/jquery.fancybox-1.3.4/fancybox/jquery.mousewheel-3.0.4.pack.js"></script> 
-    <script src="<?php echo base_url()?>assets/plugins/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.js"></script>
-     <script src="<?php echo base_url()?>assets/js/image_gallery.js"></script>
-</body>
-    <!-- END BODY-->
+	   <script src="<?php echo base_url()?>assets/plugins/jQuery/jQuery-2.1.3.min.js"></script>
+    <!-- jQuery UI 1.11.2 -->
+    <script src="<?php echo base_url()?>assets/js/jquery-ui.min.js" type="text/javascript"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+      $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 3.3.2 JS -->
+    <script src="<?php echo base_url()?>assets/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>    
+    <!-- Morris.js charts -->
+    <script src="<?php echo base_url()?>assets/js/raphael-min.js"></script>
+    <script src="<?php echo base_url()?>assets/plugins/morris/morris.min.js" type="text/javascript"></script>
+    <!-- Sparkline -->
+    <script src="<?php echo base_url()?>assets/plugins/sparkline/jquery.sparkline.min.js" type="text/javascript"></script>
+    <!-- jvectormap -->
+    <script src="<?php echo base_url()?>assets/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js" type="text/javascript"></script>
+    <script src="<?php echo base_url()?>assets/plugins/jvectormap/jquery-jvectormap-world-mill-en.js" type="text/javascript"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="<?php echo base_url()?>assets/plugins/knob/jquery.knob.js" type="text/javascript"></script>
+    <!-- daterangepicker -->
+    <script src="<?php echo base_url()?>assets/js/moment.min.js" type="text/javascript"></script>
+    <script src="<?php echo base_url()?>assets/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
+    <!-- datepicker -->
+    <script src="<?php echo base_url()?>assets/plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+    <!-- Bootstrap WYSIHTML5 -->
+    <script src="<?php echo base_url()?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>
+    <!-- Slimscroll -->
+    <script src="<?php echo base_url()?>assets/plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <!-- FastClick -->
+    <script src='<?php echo base_url()?>assets/plugins/fastclick/fastclick.min.js'></script>
+    <!-- AdminLTE App -->
+    <script src="<?php echo base_url()?>assets/dist/js/app.min.js" type="text/javascript"></script>    
     
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="<?php echo base_url()?>assets/dist/js/pages/dashboard.js" type="text/javascript"></script>    
+    
+    <!-- AdminLTE for demo purposes -->
+    <script src="<?php echo base_url()?>assets/dist/js/demo.js" type="text/javascript"></script>
+  </body>
 </html>

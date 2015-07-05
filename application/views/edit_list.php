@@ -10,26 +10,10 @@ $segments = explode('/', $_SERVER['REQUEST_URI_PATH']);
         var controller = 'rest_admin';
     </script>
 <script type="text/javascript">
-function meal_search()
+function move_it()
 {
-	var str=document.getElementById("mealsearchname").value;
-	if (str=="") {
-    document.getElementById("mealform").innerHTML=xmlhttp.responseText;
-    return;
-	}
-	if (window.XMLHttpRequest) {
-    // code for IE7+, Firefox, Chrome, Opera, Safari
-    xmlhttp=new XMLHttpRequest();
-  } else { // code for IE6, IE5
-    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-  }
-  xmlhttp.onreadystatechange=function() {
-    if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-      document.getElementById("mealform").innerHTML=xmlhttp.responseText;
-    }
-  }
-  xmlhttp.open("GET",base_url+controller+"/view_searched_meal/id/"+<?php echo $this->session->userdata('res_id');?>+"/list_type/"+<?php echo $segments[7];?>+"/mid/"+str,true);/*DOMAIN URL ERROR*/
-  xmlhttp.send();
+	var meal=document.getElementById("meal_list").value;
+	location.href = '<?php echo base_url()?>rest_admin/edit_list/id/<?php echo $this->session->userdata('res_id'); ?>/list_type/'+meal;
 }
 
 function view_details(str) {
@@ -48,7 +32,7 @@ function view_details(str) {
       document.getElementById("itemform").innerHTML=xmlhttp.responseText;
     }
   }
-  xmlhttp.open("GET",base_url+controller+"/view_meal_details/id/"+<?php echo $this->session->userdata('res_id');?>+"/mid/"+str+"/p/"+<?php if(isset($segments[8])) echo $segments[8]; else echo '0';?>+"/list_type/"+<?php echo $segments[7];?>,true);/*DOMAIN URL ERROR*/
+  xmlhttp.open("GET",base_url+controller+"/view_meal_details/id/"+<?php echo $this->session->userdata('res_id');?>+"/mid/"+str+"/p/"+<?php if(isset($segments[8])) echo $segments[8]; else echo '0';?>+"/list_type/"+<?php if(isset($num)) echo $num; else echo $segments[7];?>,true);/*DOMAIN URL ERROR*/
   xmlhttp.send();
 }
 
@@ -67,56 +51,34 @@ if (window.XMLHttpRequest) {
      location.reload(true);
     }
   } 
-xmlhttp.open("GET",base_url+controller+"/delete_meal/id/"+<?php echo $this->session->userdata('res_id');?>+"/mid/"+str+"/p/"+<?php if(isset($segments[8])) echo $segments[8]; else echo '0';?>+"/list_type/"+<?php echo $segments[7];?>,true);/*DOMAIN URL ERROR*/
+xmlhttp.open("GET",base_url+controller+"/delete_meal/id/"+<?php echo $this->session->userdata('res_id');?>+"/mid/"+str+"/p/"+<?php if(isset($segments[8])) echo $segments[8]; else echo '0';?>+"/list_type/"+<?php if(isset($num)) echo $num; else echo $segments[7];?>,true);/*DOMAIN URL ERROR*/
   xmlhttp.send();
   }
 }
 </script>
-<div class="row" style="text-align : right">
-  <h1>
-                         تعديل و عرض بيانات الوجبات
-                        </h1>
- <div class="col-lg-6">
-						<div  id="mealform" > 
+<div class="row" > 
+  <div class="col-lg-12">
 						<div class="panel panel-primary" >
-                            <div class="panel-heading">
-                                <h3 class="panel-title">عرض نتيجة البحث</h3>
-                            </div>
-							<center>
-								<div class="panel-body" style="width : 90%">
-																				
-										<?php if(isset($search_note) && (strlen($search_note)>1)):?>
-										<div class="alert alert-<?php echo $search_class?> alert-dismissable">
-											<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-											<?php echo $search_note?>.
-										</div>
-										<?php endif;?>
-								</div>
-							</center>
-							</div>
-                       </div> 
-</div>	
-  
-  <div class="col-lg-6">
-						<div class="panel panel-primary" >
-                            <div class="panel-heading">
-                                <h3 class="panel-title">ابحث عن الوجبة عن طريق الاسم</h3>
-                            </div>
 							<center>
 								<div class="panel-body" style="width : 90%">
 									
 										<div class="row">
-											    <div class="form-group" style="direction: rtl;">
-													<label >اسم الوجبة</label>
-													<input type="text" class="form-control" name="meal" id="mealsearchname" value="" placeholder="ادخل اسم الوجبة">
+											 <div class="col-lg-6">
+											  <div class="form-group">
+													<label >Meal Type</label>
+													<select class="form-control chzn-select" name="meal_list" id="meal_list">
+														<?php if(isset($record1)&&is_array($record1)):?>
+														<?php foreach ($record1 as $rows):?>
+														 <option value="<?php echo $rows->id ?>" <?php if (isset($num) && ($rows->id == $num )) echo "selected";?>> <?php echo $rows->lists_name?></option>
+														<?php endforeach;?>
+														<?php endif;?>
+													</select>
 												</div>
-											<div class="row">
-											<p style="direction:rtl;">
+											 </div>
+											 <div class="col-lg-6">
 											<input type="hidden" value="<?php echo $this->session->userdata('res_id');?>" name='id'>
-											<button type="submit" onclick="meal_search()"  class="btn btn-success">جد لي وجبتي :D  </button>
-											</p>
-											</div>
-
+											<button type="submit" onclick="move_it()"  class="btn btn-info" style="margin-top :25px ">Show ALL This Tab Meals </button>
+											</div>	
 											
 										</div>	
 						
@@ -126,15 +88,43 @@ xmlhttp.open("GET",base_url+controller+"/delete_meal/id/"+<?php echo $this->sess
                </center>         
 	</div>
 </div>
-  <div class="row" style="text-align : right">
+  <div class="row">			
+<div class="col-lg-6">
+<h1>Meals Recorded in This Tab</h1>
+<div class="table-responsive" >
+										<table class="table table-bordered table-hover table-striped" style="text-align: center;">
+											<thead>
+												<tr>
+													<th >Meal Name</th>
+													<th >Meal Description</th>
+													<th ></th>
+												</tr>
+											</thead>
+											<tbody>	
+											<?php if(isset($record) && is_array($record)):?>
+											<?php foreach($record as $row):?>
+											<tr>								
+												<td><?php echo $row->meal_name;?></td>
+												<td><?php echo $row->meal_description;?></td>
+												<td><input type="button" class="btn btn-info" onclick="view_details(<?php echo  $row->id ;?>)" value="View">
+												<input type="button" class="btn btn-danger" onclick="delete_res(<?php echo $row->id ;?>)" value="Delete">
+												</td>												
+											</tr>
+											<?php endforeach;?>
+											<?php endif; ?>
+										</tbody>
+</table>
+<?php echo $this->pagination->create_links(); ?>
+</div>
+</div>
   <div class="col-lg-6">
   <h1>
-                        لوحة التحكم بالوجبات
+                        Meals Control Panel
                         </h1>
 						<div  id="itemform" > 
 						<div class="panel panel-primary" >
                             <div class="panel-heading">
-                                <h3 class="panel-title">عرض بيانات الوجبات</h3>
+                                <h3 class="panel-title">Show Meals Details</h3>
                             </div>
 							<center>
 								<div class="panel-body" style="width : 90%">
@@ -150,33 +140,5 @@ xmlhttp.open("GET",base_url+controller+"/delete_meal/id/"+<?php echo $this->sess
 							</center>
 							</div>
                        </div> 
-	</div>				
-<div class="col-lg-6">
-<h1>الوجبات المسجلة في هذه القائمة</h1>
-<div class="table-responsive" style="direction: rtl;">
-										<table class="table table-bordered table-hover table-striped" style="text-align: center;">
-											<thead>
-												<tr>
-													<th style="text-align : right">اسم الوجبة</th>
-													<th style="text-align : right">وصف الوجبة</th>
-													<th style="text-align : right"></th>
-												</tr>
-											</thead>
-											<tbody>	
-											<?php if(isset($record) && is_array($record)):?>
-											<?php foreach($record as $row):?>
-											<tr>								
-												<td><?php echo $row->meal_name;?></td>
-												<td><?php echo $row->meal_description;?></td>
-												<td><input type="button" class="btn btn-info" onclick="view_details(<?php echo  $row->id ;?>)" value="استعراض">
-												<input type="button" class="btn btn-danger" onclick="delete_res(<?php echo $row->id ;?>)" value="حذف">
-												</td>												
-											</tr>
-											<?php endforeach;?>
-											<?php endif; ?>
-										</tbody>
-</table>
-<?php echo $this->pagination->create_links(); ?>
-</div>
-</div>
+	</div>	
 </div>

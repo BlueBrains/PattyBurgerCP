@@ -1,4 +1,4 @@
-/* Javascript plotting library for jQuery, version 0.8.3-alpha.
+/* Javascript plotting library for jQuery, version 0.8.2.
 
 Copyright (c) 2007-2013 IOLA and Ole Laursen.
 Licensed under the MIT license.
@@ -1706,8 +1706,8 @@ Licensed under the MIT license.
             axis.tickDecimals = Math.max(0, maxDec != null ? maxDec : dec);
             axis.tickSize = opts.tickSize || size;
 
-            // Time mode was moved to a plug-in in 0.8, and since so many people use it
-            // we'll add an especially friendly reminder to make sure they included it.
+            // Time mode was moved to a plug-in in 0.8, but since so many people use this
+            // we'll add an especially friendly make sure they remembered to include it.
 
             if (opts.mode == "time" && !axis.tickGenerator) {
                 throw new Error("Time mode requires the flot.time plugin.");
@@ -1963,34 +1963,26 @@ Licensed under the MIT license.
                     yrange.from = Math.max(yrange.from, yrange.axis.min);
                     yrange.to = Math.min(yrange.to, yrange.axis.max);
 
-                    var xequal = xrange.from === xrange.to,
-                        yequal = yrange.from === yrange.to;
-
-                    if (xequal && yequal) {
+                    if (xrange.from == xrange.to && yrange.from == yrange.to)
                         continue;
-                    }
 
                     // then draw
-                    xrange.from = Math.floor(xrange.axis.p2c(xrange.from));
-                    xrange.to = Math.floor(xrange.axis.p2c(xrange.to));
-                    yrange.from = Math.floor(yrange.axis.p2c(yrange.from));
-                    yrange.to = Math.floor(yrange.axis.p2c(yrange.to));
+                    xrange.from = xrange.axis.p2c(xrange.from);
+                    xrange.to = xrange.axis.p2c(xrange.to);
+                    yrange.from = yrange.axis.p2c(yrange.from);
+                    yrange.to = yrange.axis.p2c(yrange.to);
 
-                    if (xequal || yequal) {
-                        var lineWidth = m.lineWidth || options.grid.markingsLineWidth,
-                            subPixel = lineWidth % 2 ? 0.5 : 0;
+                    if (xrange.from == xrange.to || yrange.from == yrange.to) {
+                        // draw line
                         ctx.beginPath();
                         ctx.strokeStyle = m.color || options.grid.markingsColor;
-                        ctx.lineWidth = lineWidth;
-                        if (xequal) {
-                            ctx.moveTo(xrange.to + subPixel, yrange.from);
-                            ctx.lineTo(xrange.to + subPixel, yrange.to);
-                        } else {
-                            ctx.moveTo(xrange.from, yrange.to + subPixel);
-                            ctx.lineTo(xrange.to, yrange.to + subPixel);                            
-                        }
+                        ctx.lineWidth = m.lineWidth || options.grid.markingsLineWidth;
+                        ctx.moveTo(xrange.from, yrange.from);
+                        ctx.lineTo(xrange.to, yrange.to);
                         ctx.stroke();
-                    } else {
+                    }
+                    else {
+                        // fill area
                         ctx.fillStyle = m.color || options.grid.markingsColor;
                         ctx.fillRect(xrange.from, yrange.to,
                                      xrange.to - xrange.from,
@@ -3125,7 +3117,7 @@ Licensed under the MIT license.
         return plot;
     };
 
-    $.plot.version = "0.8.3-alpha";
+    $.plot.version = "0.8.2";
 
     $.plot.plugins = [];
 

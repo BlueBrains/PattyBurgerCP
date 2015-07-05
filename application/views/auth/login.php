@@ -15,9 +15,9 @@
         <![endif]-->
     <!-- GLOBAL STYLES -->
      <!-- PAGE LEVEL STYLES -->
-     <link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/bootstrap/css/bootstrap.css" />
-    <link rel="stylesheet" href="<?php echo base_url()?>assets/css/login.css" />
-    <link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/magic/magic.css" />
+     <link rel="stylesheet" href="<?php echo base_url()?>bassets/plugins/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="<?php echo base_url()?>bassets/css/login.css" />
+    <link rel="stylesheet" href="<?php echo base_url()?>bassets/plugins/magic/magic.css" />
      <!-- END PAGE LEVEL STYLES -->
    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -34,7 +34,7 @@
     <div class="container">
     	<!--
     <div class="text-center">
-        <img src="<?php echo base_url()?>assets/img/logo.png" id="logoimg" alt=" Logo" />
+        <img src="<?php echo base_url()?>bassets/img/logo.png" id="logoimg" alt=" Logo" />
     </div>
     -->
     <?php if(!empty($message)) echo '<div id="infoMessage" class="alert alert-warning"><i class="fa fa-warning"></i> '.$message.'</div>';?>
@@ -98,9 +98,9 @@
 	  <!--END PAGE CONTENT -->     
 	      
       <!-- PAGE LEVEL SCRIPTS -->
-      <script src="<?php echo base_url();?>assets/plugins/jquery-2.0.3.min.js"></script>
-      <script src="<?php echo base_url();?>assets/plugins/bootstrap/js/bootstrap.js"></script>
-   <script src="<?php echo base_url();?>assets/js/login.js"></script>
+      <script src="<?php echo base_url();?>bassets/plugins/jquery-2.0.3.min.js"></script>
+      <script src="<?php echo base_url();?>bassets/plugins/bootstrap/js/bootstrap.js"></script>
+   <script src="<?php echo base_url();?>bassets/js/login.js"></script>
       <!--END PAGE LEVEL SCRIPTS -->
 
 </body>

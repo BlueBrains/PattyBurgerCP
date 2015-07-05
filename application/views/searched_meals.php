@@ -13,6 +13,7 @@ $segments = explode('/', $_SERVER['REQUEST_URI_PATH']);
 function meal_search()
 {
 	var str=document.getElementById("mealsearchname").value;
+		var meal=document.getElementById("meal_list").value;
 	if (str=="") {
     document.getElementById("mealform").innerHTML="";
     return;
@@ -28,7 +29,7 @@ function meal_search()
       document.getElementById("mealform").innerHTML=xmlhttp.responseText;
     }
   }
-  xmlhttp.open("GET",base_url+controller+"/view_meal_details/id/"+<?php echo $this->session->userdata('res_id');?>+"/mid/"+str+"/p/"+<?php if(isset($segments[8])) echo $segments[8]; else echo '0';?>+"/list_type/"+<?php echo $segments[7];?>,true);/*DOMAIN URL ERROR*/
+  xmlhttp.open("GET",base_url+controller+"/view_meal_details/id/"+<?php echo $this->session->userdata('res_id');?>+"/mid/"+str+"/p/"+<?php if(isset($segments[8])) echo $segments[8]; else echo '0';?>+"/list_type/"+meal,true);/*DOMAIN URL ERROR*/
   xmlhttp.send();
 }
 
@@ -72,15 +73,15 @@ xmlhttp.open("GET",base_url+controller+"/delete_meal/id/"+<?php echo $this->sess
   }
 }
 </script>
-<div class="row" style="text-align : right">
+<div class="row" >
   <div class="col-lg-12">
   <h1>
-                        نتيجة بحثك عن <?php echo $search?>
+                        <?php echo $search?> results 
                         </h1>
 						
 						<div class="panel panel-primary" >
                             <div class="panel-heading">
-                                <h3 class="panel-title">ابحث عن الوجبة عن طريق الاسم</h3>
+                                <h3 class="panel-title">Enter The Meal Name</h3>
                             </div>
 							<center>
 								<div class="panel-body" style="width : 90%">
@@ -100,13 +101,23 @@ xmlhttp.open("GET",base_url+controller+"/delete_meal/id/"+<?php echo $this->sess
 											
 											<div class="col-lg-6">
 											    <div class="form-group" style="direction: rtl;">
-													<label >اسم الوجبة</label>
+													<label >Meal Name</label>
 													<input type="text" class="form-control" name="meal" id="mealsearchname" value="" placeholder="ادخل اسم الوجبة">
+												</div>
+												<div class="form-group">
+													<label >Meal Type</label>
+													<select class="form-control chzn-select" name="meal_list" id="meal_list">
+														<?php if(isset($record1)&&is_array($record1)):?>
+														<?php foreach ($record1 as $rows):?>
+														 <option value="<?php echo $rows->id ?>" > <?php echo $rows->lists_name?></option>
+														<?php endforeach;?>
+														<?php endif;?>
+													</select>
 												</div>
 											<div class="row">
 											<p style="direction:rtl;">
 											<input type="hidden" value="<?php echo $this->session->userdata('res_id');?>" name='id'>
-											<button type="submit" onclick="meal_search()"  class="btn btn-success">جد لي وجبتي :D  </button>
+											<button type="submit" onclick="meal_search()"  class="btn btn-success">Find it !  </button>
 											</p>
 											</div>
 											</div>
@@ -122,12 +133,12 @@ xmlhttp.open("GET",base_url+controller+"/delete_meal/id/"+<?php echo $this->sess
   <div class="row" style="text-align : right">
   <div class="col-lg-6">
   <h1>
-                        لوحة التحكم بالوجبات
+                        Meals Control Panel
                         </h1>
 						<div  id="itemform" > 
 						<div class="panel panel-primary" >
                             <div class="panel-heading">
-                                <h3 class="panel-title">عرض بيانات الوجبات</h3>
+                                <h3 class="panel-title">Show Meal Details</h3>
                             </div>
 							<center>
 								<div class="panel-body" style="width : 90%">
@@ -145,14 +156,14 @@ xmlhttp.open("GET",base_url+controller+"/delete_meal/id/"+<?php echo $this->sess
                        </div> 
 	</div>				
 <div class="col-lg-6">
-<h1> الوجبات المسجلة في هذه القائمة و المطابقة لبحثك عن <?php echo $search ?></h1>
+<h1>ALL Results That Matching your search about <?php echo $search ?></h1>
 <div class="table-responsive" style="direction: rtl;">
 										<table class="table table-bordered table-hover table-striped" style="text-align: center;">
 											<thead>
 												<tr>
-													<th style="text-align : right">اسم الوجبة</th>
-													<th style="text-align : right">وصف الوجبة</th>
-													<th style="text-align : right"></th>
+													<th>Meal Name</th>
+													<th>Meal Description</th>
+													<th ></th>
 												</tr>
 											</thead>
 											<tbody>	
@@ -161,8 +172,8 @@ xmlhttp.open("GET",base_url+controller+"/delete_meal/id/"+<?php echo $this->sess
 											<tr>								
 												<td><?php echo $row->meal_name;?></td>
 												<td><?php echo $row->meal_description;?></td>
-												<td><input type="button" class="btn btn-info" onclick="view_details(<?php echo  $row->id ;?>)" value="استعراض">
-												<input type="button" class="btn btn-danger" onclick="delete_res(<?php echo $row->id ;?>)" value="حذف">
+												<td><input type="button" class="btn btn-info" onclick="view_details(<?php echo  $row->id ;?>)" value="View">
+												<input type="button" class="btn btn-danger" onclick="delete_res(<?php echo $row->id ;?>)" value="Delete">
 												</td>												
 											</tr>
 											<?php endforeach;?>

@@ -4,12 +4,12 @@
   <div class="col-lg-12">
 						<div class="panel panel-primary" >
                             <div class="panel-heading">
-                                <h3 class="panel-title">يمكنك تعديل البيانات إن أردت</h3>
+                                <h3 class="panel-title">You can edit the Meal Details</h3>
                             </div>
 							
 							<?php if(isset($num)&&($num>1)):?>
 								<div class="alert alert-info">
-									عدد نتائج البحث هو <?php echo $num;?><a href='<?php echo base_url()?>rest_admin/searched_res/id/<?php echo $id ?>/list_type/<?php echo $list_type ?>/mid/<?php echo $result ?>' class="alert-link">عرض جميع النتائج</a>.
+									Number of Matching <?php echo $num;?><a href='<?php echo base_url()?>rest_admin/searched_res/id/<?php echo $id ?>/list_type/<?php echo $list_type ?>/mid/<?php echo $result ?>' class="alert-link">عرض جميع النتائج</a>.
                                 </div>
 							<?php endif; ?>
 							
@@ -20,7 +20,7 @@
 											<?php foreach ($record as $rows):?>
 												<div class="row">
 													<div class="form-group" style="direction: rtl;">
-															<label >اسم الوجبة</label>
+															<label >Meal name</label>
 															<input type="text" class="form-control" name="meal_name" id="user" value="<?php echo $rows->meal_name ?>" placeholder="اسم الوجبة">
 														</div>
 												</div>
@@ -28,15 +28,15 @@
 												<div class="row">
 													<div class="col-lg-6">
 														<div class="form-group" style="direction: rtl;">
-															<label >سعر الوجبة</label>
+															<label >Meal Price</label>
 															<input type="text" class="form-control" name="meal_price"  value="<?php echo $rows->meal_price ?>" placeholder=" سعر الوجبة">
 														</div>
 														<div class="form-group" style="direction: rtl;">
-															<label >تخفيض على الوجبة</label>
+															<label >Discount</label>
 															<input type="text" class="form-control" name="meal_discount"  value="<?php echo $rows->meal_discount ?>" placeholder="نسبة التخفيض أو العرض ">
 														</div>
 														<div class="form-group" style="direction: rtl;">
-															<label >نوع الوجبة</label>
+															<label >Meal Type</label>
 															<select class="form-control chzn-select" name="meal_list">
 																<?php if(isset($record1)&&is_array($record1)):?>
 																<?php foreach ($record1 as $row):?>
@@ -53,11 +53,11 @@
 													</div>
 													<div class="col-lg-6">
 													<div class="form-group" style="direction: rtl;">
-															<label >وصف الوجبة</label>
+															<label >Description</label>
 																<textarea name="meal_description" style="height: 200px;width: 100%;"><?php echo $rows->meal_description ?></textarea>
 													</div>
 														<div class="row">
-															<label class="control-label">تغيير صورة الوجبة</label>
+															<label class="control-label">Change Meal Pic</label>
 														</div>
 														<div class="row">
 															<div class="form-group">
@@ -82,7 +82,7 @@
 													
 													<p style="direction:rtl;">
 
-													<button type="submit" class="btn btn-info">تعديل الوجبة</button>
+													<button type="submit" class="btn btn-info">Save Changes</button>
 													</p>
 													</center>
 													</div>

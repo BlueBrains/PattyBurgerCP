@@ -238,7 +238,7 @@ class branch_model extends CI_Model {
 				$q="SELECT * FROM meal where list_id='".$id."'";
 				$config['base_url'] = base_url().'rest_admin/edit_list/id/'.$this->session->userdata('res_id').'/list_type/'.$id;
 				
-					$limit = 2;
+					$limit = 10;
 				$offset = ($this->uri->segment(7) != '' ? $this->uri->segment(7):0);
 				//echo'<script type="text/javascript">alert('.$offset.');</script>';
 				$config['total_rows'] = $this->db->query($q)->num_rows;
@@ -260,6 +260,20 @@ class branch_model extends CI_Model {
 			$f=FALSE;	
 			return $f;
 		}	
+	}
+	
+	function get_random_lists($id)
+	{
+		$q="SELECT * FROM list_res where res_id='".$id."' limit 1";
+		$sql=$this->db->query($q);
+				
+				foreach ($sql->result() as $raw ) {
+					$data[]=$raw;
+				}
+		if ($sql->num_rows > 0)
+           { 
+			 return $data[0]->list_id; 
+		}
 	}
 	
 	function get_searched_meals($meal_name,$id)
@@ -296,6 +310,62 @@ class branch_model extends CI_Model {
 			$temp['meal']=false;
 			$temp['num']=$sql->num_rows;
 			return $temp;
+		}
+	}
+	
+	function delete_list($id)
+	{
+		/*$this->db->trans_begin();
+			$q1="SELECT * FROM meal WHERE list_id =?";
+			$sql1=$this->db->query($q1,$id);
+			
+				foreach ($sql->result() as $raw ) {
+					$data[]=$raw;}
+					
+				foreach ($data as $row ) {	
+					$file=realpath($_SERVER["DOCUMENT_ROOT"])."\\burger_ownercp\\upload\\".$this->session->userdata('res_id')."\\".$row['meal_img'];
+					unlink($file); // delete file
+				}
+		*/		
+			$q="DELETE FROM meal WHERE list_id =?";
+				$sql=$this->db->query($q,$id);
+				
+			$q="DELETE FROM list_res WHERE list_id =? and res_id=?";
+				$sql=$this->db->query($q,$id,$this->session->userdata('res_id'));/*	
+		if ($this->db->trans_status() === FALSE)
+					 {
+						$this->db->trans_rollback();
+					 }
+					 else
+					 {
+						$this->db->trans_commit();
+					 }		*/
+		
+	}
+	
+	function add_map_position($id)
+	{
+		
+	}
+	
+	function get_map_position($id)
+	{
+		
+	}
+
+	function get_details()
+	{
+		$q="SELECT res_name,name FROM restaurant inner join types on types.id=type_id where restaurant.id='".$this->session->userdata('res_id')."'";
+		$sql=$this->db->query($q);
+				
+				foreach ($sql->result() as $raw ) {
+					$data[]=$raw;
+				}
+		if ($sql->num_rows > 0)
+           { 
+			 $temp['name']=$data[0]->res_name;
+			 $temp['type']=$data[0]->name;
+			 return $temp; 
 		}
 	}
 	
