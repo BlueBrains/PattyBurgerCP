@@ -45,7 +45,6 @@ class Migration_order_statistics extends CI_Migration{
 			),
 			'delivered' => array(
 				'type'=>'boolean',
-				'default'=>'true'
 			),
 			'delivery_boy_id' => array(
 				'type'=>'int',
@@ -53,12 +52,9 @@ class Migration_order_statistics extends CI_Migration{
 			),
 			'Order_time'=>array(
 				'type'=>'TIMESTAMP', 
-				'constraint'=>"NOT NULL",
-				'default'=>'CURRENT_TIMESTAMP'
 			),
 			'bill_value'=>array(
-				'type'=>'double',
-				'constraint'=>25,
+				'type'=>'double'
 			)
 	)); 	  
 		$this->dbforge->add_key('id',TRUE);
@@ -96,8 +92,6 @@ class Migration_order_statistics extends CI_Migration{
 			),
 			'month' => array(
 				'type'=>'TIMESTAMP', 
-				'constraint'=>"NOT NULL",
-				'default'=>'CURRENT_TIMESTAMP'
 			),
 			'deleted_order'=>array(
 				'type'=>'int',
@@ -113,7 +107,6 @@ class Migration_order_statistics extends CI_Migration{
 			),
 			'total_profits'=>array(
 				'type'=>'Double',
-				'constraint'=>20
 			)
 	)); 
 		$this->dbforge->add_key('id',TRUE);	
@@ -130,29 +123,27 @@ class Migration_order_statistics extends CI_Migration{
 				'type'=>'int',
 				'constraint'=>11
 			),
-			'Max_Meal_Order_id'=>array(
+			'Max_Order_id'=>array(
 				'type'=>'int',
 				'constraint'=>11
 			),
-			'Max_Meal_Order_number'=>array(
+			'Max_number'=>array(
 				'type'=>'int',
 				'constraint'=>11
 			),
-			'Max_Meal_Order_profits'=>array(
+			'Max_Meal_profits'=>array(
 				'type'=>'Double',
-				'constraint'=>20
 			),
-			'Min_Meal_Order_id'=>array(
+			'Min_Order_id'=>array(
 				'type'=>'int',
 				'constraint'=>11
 			),
-			'Min_Meal_Order_number'=>array(
+			'Min_number'=>array(
 				'type'=>'int',
 				'constraint'=>11
 			),
-			'Min_Meal_Order_profits'=>array(
+			'Min_Meal_profits'=>array(
 				'type'=>'Double',
-				'constraint'=>20
 			)
 	)); 
 		$this->dbforge->add_key('id',TRUE);	
