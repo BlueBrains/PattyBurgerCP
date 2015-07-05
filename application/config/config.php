@@ -11,7 +11,7 @@
 |	http://example.com/
 |
 */
-$config['base_url']	= "http://localhost/burger_ownercp";
+$config['base_url']	= "http://localhost/OwnerCP";
 
 /*
 |--------------------------------------------------------------------------

@@ -41,6 +41,8 @@
 
 $autoload['libraries'] = array('database','session','ion_auth');
 
+$autoload['sparks'] = array('restclient/2.2.1');
+
 /*
 | -------------------------------------------------------------------
 |  Auto-load Helper Files
