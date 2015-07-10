@@ -45,7 +45,7 @@
 													<select class="form-control chzn-select" name="meal_list">
 														<?php if(isset($record)&&is_array($record)):?>
 														<?php foreach ($record as $rows):?>
-														 <option value="<?php echo $rows->id ?>" > <?php echo $rows->lists_name?></option>
+														 <option value="<?php echo $rows->id ?>" > <?php echo $rows->name?></option>
 														<?php endforeach;?>
 														<?php endif;?>
 													</select>

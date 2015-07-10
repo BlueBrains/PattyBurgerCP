@@ -69,7 +69,7 @@ xmlhttp.open("GET",base_url+controller+"/delete_meal/id/"+<?php echo $this->sess
 													<select class="form-control chzn-select" name="meal_list" id="meal_list">
 														<?php if(isset($record1)&&is_array($record1)):?>
 														<?php foreach ($record1 as $rows):?>
-														 <option value="<?php echo $rows->id ?>" <?php if (isset($num) && ($rows->id == $num )) echo "selected";?>> <?php echo $rows->lists_name?></option>
+														 <option value="<?php echo $rows->id ?>" <?php if (isset($num) && ($rows->id == $num )) echo "selected";?>> <?php echo $rows->name?></option>
 														<?php endforeach;?>
 														<?php endif;?>
 													</select>
@@ -104,8 +104,8 @@ xmlhttp.open("GET",base_url+controller+"/delete_meal/id/"+<?php echo $this->sess
 											<?php if(isset($record) && is_array($record)):?>
 											<?php foreach($record as $row):?>
 											<tr>								
-												<td><?php echo $row->meal_name;?></td>
-												<td><?php echo $row->meal_description;?></td>
+												<td><?php echo $row->name;?></td>
+												<td><?php echo $row->description;?></td>
 												<td><input type="button" class="btn btn-info" onclick="view_details(<?php echo  $row->id ;?>)" value="View">
 												<input type="button" class="btn btn-danger" onclick="delete_res(<?php echo $row->id ;?>)" value="Delete">
 												</td>												

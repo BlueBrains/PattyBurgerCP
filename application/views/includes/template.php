@@ -1,10 +1,12 @@
 		<?php $this->load->view('includes/header.php');  ?>
 
 		<?php $this->load->view('includes/sidebar.php');  ?>
+		
          <div class="content-wrapper">
 			        <section class="content">
 						<div class="row">
 						<div class="col-md-12">
+						<?php if($this->session->userdata('logged_in')&&($this->session->userdata('role')>2)): ?>
 						<div class="row">
 							<div class="col-md-3 col-sm-6 col-xs-12">
 							  <div class="info-box bg-aqua">
@@ -67,9 +69,12 @@
 							  </div><!-- /.info-box -->
 							</div><!-- /.col -->
 						  </div><!-- /.row -->
+						  <?php endif; ?>
+						  
 								<?php $this->load->view($main_content);  ?>
 							</div>
 						</div>
 					</section><!-- /.content -->
 		</div><!-- /.content-wrapper -->
+		
 		<?php $this->load->view('includes/footer.php');  ?>

@@ -13,27 +13,27 @@
 											<div class="col-lg-6">
 											    <div class="form-group" style="direction: rtl;">
 													<label >رقم الهاتف 2</label>
-													<input type="text" class="form-control" name="phone2" id="phone2" value="<?php echo $rows->phone2?>" placeholder="رقم الهاتف الثاني">
+													<input type="text" class="form-control" name="phone2" id="phone2" value="<?php echo $rows->phone_nbr_2?>" placeholder="رقم الهاتف الثاني">
 												</div>
 												<div class="form-group" style="direction: rtl;">
 													<label >رقم الهاتف3</label>
-													<input type="text" class="form-control" name="phone3" id="phone3" value="<?php echo $rows->phone3 ?>" placeholder="رقم الهاتف الثالث">
+													<input type="text" class="form-control" name="phone3" id="phone3" value="<?php echo $rows->phone_nbr_3 ?>" placeholder="رقم الهاتف الثالث">
 												</div>
 											</div>
 											<div class="col-lg-6">
 												<div class="form-group">
 													<label >عنوان الفرع</label>
-													<input type="text" class="form-control" name="res_add" id="address_ar"value="<?php echo $rows->Branch_Address ?>" placeholder="">
+													<input type="text" class="form-control" name="res_add" id="address_ar"value="<?php echo $rows->address ?>" placeholder="">
 												</div>
 												<div class="form-group" style="direction: rtl;">
 													<label >رقم الهاتف 1</label>
-													<input type="text" class="form-control" name="phone1" id="phone1" value="<?php echo $rows->phone1 ?>" placeholder="رقم الهاتف الاول">
+													<input type="text" class="form-control" name="phone1" id="phone1" value="<?php echo $rows->phone_nbr_1 ?>" placeholder="رقم الهاتف الاول">
 												</div>
 											</div>
 											</div>
 											<div class="row">
-											<p style="direction:rtl;">
-											<input type="hidden" value="<?php echo $this->session->userdata('res_id');?>" name='id'>
+											<p style="direction:rtl;"><!--
+											<input type="hidden" value="<?php echo $this->session->userdata('res_id');?>" name='id'>-->
 											<input type="hidden" value="<?php echo $rows->id;?>" name='br_id'>
 											<button type="submit" class="btn btn-warning">حفظ التعديلات</button>
 											</p>

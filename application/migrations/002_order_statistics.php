@@ -39,11 +39,11 @@ class Migration_order_statistics extends CI_Migration{
 				'type'=>'int',
 				'constraint'=>11
 			),
-			'res_id' => array(
+			'branch_id' => array(
 				'type'=>'int',
 				'constraint'=>11
 			),
-			'delivered' => array(
+			'delivery' => array(
 				'type'=>'boolean',
 			),
 			'delivery_boy_id' => array(
@@ -55,6 +55,14 @@ class Migration_order_statistics extends CI_Migration{
 			),
 			'bill_value'=>array(
 				'type'=>'double'
+			),
+			'order_status'=>array(
+				'type'=>'tinyint',
+				'constraint'=>5,
+				'default'=>0
+			),
+			'expected_finish_time'=>array(
+				'type'=>'TIMESTAMP',
 			)
 	)); 	  
 		$this->dbforge->add_key('id',TRUE);
@@ -75,10 +83,6 @@ class Migration_order_statistics extends CI_Migration{
 				'type'=>'int',
 				'constraint'=>11
 			),
-			'customize_meal_id'=>array(
-				'type'=>'int',
-				'constraint'=>11
-			)
 	)); 
 		$this->dbforge->add_key('id',TRUE);	
 		$this->dbforge->create_table('meals_order',TRUE);
@@ -149,41 +153,6 @@ class Migration_order_statistics extends CI_Migration{
 		$this->dbforge->add_key('id',TRUE);	
 		$this->dbforge->create_table('categories_statistiscs',TRUE);
 
-		
-	
-	$this->dbforge->add_field(array(
-			'id' => array(
-				'type'=>'int',
-				'constraint'=>11,
-				'unsigned' => TRUE,
-				'auto_increment' => TRUE
-			),
-			'customize_type' => array(
-				'type'=>'varchar',
-				'constraint'=>255,
-			)
-	)); 
-		$this->dbforge->add_key('id',TRUE);	
-		$this->dbforge->create_table('customize',TRUE);	
-		
-	$this->dbforge->add_field(array(
-			'id' => array(
-				'type'=>'int',
-				'constraint'=>11,
-				'unsigned' => TRUE,
-				'auto_increment' => TRUE
-			),
-			'customize_id' => array(
-				'type'=>'int',
-				'constraint'=>11,
-			),
-			'meal_id' => array(
-				'type'=>'int',
-				'constraint'=>11,
-			),
-	)); 
-		$this->dbforge->add_key('id',TRUE);	
-		$this->dbforge->create_table('customize_meals',TRUE);		
 }
 
 
@@ -194,8 +163,6 @@ class Migration_order_statistics extends CI_Migration{
 		$this->dbforge->drop_table('meals_order');
 		$this->dbforge->drop_table('branch_monthly_statistics');
 		$this->dbforge->drop_table('categories_statistiscs');
-		$this->dbforge->drop_table('customize');
-		$this->dbforge->drop_table('customize_meals');
 	}
 
 }

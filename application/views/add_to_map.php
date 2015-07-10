@@ -17,8 +17,7 @@
       var map = new google.maps.Map(document.getElementById("map-canvas"), options);
       var html = "<table style='color: black;'>" +
                  "<tr><td>Name:</td> <td><input type='text' value='<?php echo $name?>' id='name' disabled /> </td> </tr>" +
-                 "<tr><td>Address:</td> <td><input type='text' placeholder='add small note' id='address'/></td> </tr>" +
-                 "<tr><td>Type:</td> <td><?php echo $type?> </td></tr>" +
+                 "<tr><td><img src='<?php echo base_url()?>uploads/<?php echo $logo;?>'/></td></tr>" +
                  "<tr><td></td><td><input type='button' class='btn bg-navy margin' value='Save & Close' onclick='saveData()'/></td></tr>";
     infowindow = new google.maps.InfoWindow({
      content: html

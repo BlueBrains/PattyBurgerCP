@@ -1,4 +1,5 @@
-     <aside class="main-sidebar">
+<script src="<?php echo base_url()?>js/jquery.min.js" type="text/javascript"></script> 
+ <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
           <!-- Sidebar user panel -->
@@ -25,7 +26,7 @@
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu">
             <li class="header">MAIN Control Panel</li>
-			<?php if($this->ion_auth->logged_in() && $this->ion_auth->is_admin()): ?>
+			<?php if($this->session->userdata('logged_in')&&($this->session->userdata('role')==1)): ?>
 			<li class="treeview">
               <a href="#">
                 <i class="fa fa-user"></i>
@@ -34,12 +35,14 @@
               <ul class="treeview-menu">
                 <li><a href="<?php echo base_url();?>manager"><i class="fa fa-circle-o"></i>Main Page</a></li>
 				<li><a href="<?php echo base_url();?>manager/edit_types"><i class="fa fa-circle-o"></i>Edit Global shops Type</a></li>
+				<li><a href="<?php echo base_url();?>manager/edit_groups"><i class="fa fa-circle-o"></i>Edit users Group</a></li>
                 <li><a href="<?php echo base_url();?>manager/edit_resturants"><i class="fa fa-circle-o"></i>Edit Restaurants Activations</a></li>
               </ul>
             </li>
+			
 			<?php endif; ?>
-			<?php if($this->ion_auth->logged_in() && !$this->ion_auth->is_admin()): ?>
-            <li><a href=""><i class="fa fa-bell-o"></i> <span>APPROVE Request</span> <small class="label pull-right bg-green">new</small></a></li>
+			<?php if($this->session->userdata('logged_in')&&($this->session->userdata('role')==2)): ?>
+
 			<li class="active treeview">
               <a href="#">
                 <i class="fa fa-bar-chart-o"></i> <span>Statistics</span> <i class="fa fa-angle-left pull-right"></i>
@@ -59,6 +62,30 @@
                 <li><a href="<?php echo base_url();?>rest_admin/all_branches/id/<?php echo $this->session->userdata('res_id')?>"><i class="fa fa-circle-o"></i>Edit Branches</a></li>
               </ul>
             </li>
+			<li class="treeview">
+              <a href="#">
+                <i class="fa fa-users"></i>
+                <span>الموظفون</span><i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="<?php echo base_url();?>rest_admin/add_worker"><i class="fa fa-circle-o"></i> إضافة موظف</a></li>
+                <li><a href="<?php echo base_url();?>rest_admin/edit_workers"><i class="fa fa-circle-o"></i>تعديل قائمة الموظفين</a></li>
+              </ul>
+            </li>
+			<?php else :?>
+			
+			<?php if($this->session->userdata('logged_in')&&($this->session->userdata('role')==4)): ?>
+			<li class="active treeview">
+              <a href="#">
+                <i class="fa fa-bar-chart-o"></i> <span>Statistics</span> <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li class="active"><a href="index.html"><i class="fa fa-circle-o"></i> Basic Statistics</a></li>
+                <li><a href="index2.html"><i class="fa fa-pie-chart"></i>Deep Statistics</a></li>
+              </ul>
+            </li>
+			<?php endif;?>
+			<li><a href=""><i class="fa fa-bell-o"></i> <span>APPROVE Request</span> <small class="label pull-right bg-green">new</small></a></li>
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-cutlery"></i>
@@ -85,26 +112,10 @@
                 <li><a href=""><i class="fa fa-circle-o text-aqua"></i>ALL Requests<span class="label label-info pull-right">12</span></a></li>
                 <li><a href=""><i class="fa fa-circle-o text-red"></i>Not Ready Requests<span class="label label-danger pull-right">2</span></a></li>
                 <li><a href=""><i class="fa fa-circle-o text-yellow"></i>ON the way<span class="label label-warning pull-right">7</span></a></li>
-                <li><a href=""><i class="fa fa-circle-o text-green"></i>Delivered Requests <span class="label label-success pull-right">3</span></a></li>
+                <li><a href=""><i class="fa fa-circle-o text-green"></i>Delivered Requests<span class="label label-success pull-right">3</span></a></li>
               </ul>
             </li>
-			<li>
-              <a href="<?php echo base_url()?>rest_admin/map/id/<?php echo $this->session->userdata('res_id')?>">
-                <i class="fa fa-map-marker"></i> <span>MY Map</span>
-              </a>
-            </li>
-            <li>
-              <a href="pages/calendar.html">
-                <i class="fa fa-calendar"></i> <span>Calendar</span>
-              </a>
-            </li>
-            <li>
-              <a href="">
-                <i class="fa fa-envelope"></i> <span>Mailbox</span>
-                <small class="label pull-right bg-yellow">12</small>
-              </a>
-            </li>
-            <?php endif; ?>
+			<?php endif; ?>
           </ul>
         </section>
         <!-- /.sidebar -->

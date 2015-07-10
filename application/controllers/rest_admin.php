@@ -5,7 +5,7 @@ class rest_admin extends REST_Controller {
 		parent::__construct();
 		$this->load->library('session');
 		
-		if($this->ion_auth->logged_in()){
+		if($this->session->userdata('logged_in')&&($this->session->userdata('role')>1)){
 			$this->load->library('pagination');
 			$this->load->model('branch_model');
 			 header('Content-Type: text/html; charset=utf-8');
@@ -18,9 +18,20 @@ class rest_admin extends REST_Controller {
 	
 	function index_get()
 	{
+		if($this->session->userdata('logged_in')&&($this->session->userdata('role')==2)){	
+			$temp=$this->branch_model->get_details();
+			$data['name']=$temp['name'];
+			$data['logo']=$temp['logo'];
+			$data['worker_number']=$this->branch_model->worker_number($this->session->userdata('res_id'));
+			$data['b_num']=$this->branch_model->branch_number($this->session->userdata('res_id'));
 			$data['record'] =$this->branch_model->get_myres($this->session->userdata('res_id'));
-			$data['main_content'] = 'edit_branches';	
-			$this->load->view('includes/template',$data);
+			$data['main_content'] = 'branch/homepage';	
+			$this->load->view('includes/template',$data);}
+		else 
+			{
+				$data['main_content'] = 'branch/subadmin';	
+				$this->load->view('includes/template',$data);
+			}
 	}
 	
 	function all_branches_get()
@@ -32,24 +43,23 @@ class rest_admin extends REST_Controller {
 	
 	function add_branches_get()
 	{
-		if($this->session->userdata('res_id')==$this->get('id')){
-		$data['main_content'] = 'add_NewBranch';	
-		$this->load->view('includes/template',$data);}
-		else
-			redirect('auth/logout');
+		    $temp=$this->branch_model->get_details();
+			$data['name']=$temp['name'];
+			$data['logo']=$temp['logo'];
+		$data['main_content'] = 'branch/add_NewBranch';	
+		$this->load->view('includes/template',$data);
 	}
 	
 	function add_branches_post()
 	{
 			$this->branch_model->add_new_branch($this->session->userdata('res_id'));
-			redirect('rest_admin/add_branches/id/'.$this->session->userdata('res_id'));
+			redirect('rest_admin/add_branches');
 	}
 	
 	function edit_meals_get()
 	{
 
 		$data['record'] =$this->branch_model->get_lists();
-		$data['record1']=$this->branch_model->get_mlists($this->session->userdata('res_id'));
 		$data['main_content'] = 'edit_meals';	
 		$this->load->view('includes/template',$data);
 
@@ -84,7 +94,7 @@ class rest_admin extends REST_Controller {
 	function view_details_get()
 	{
 		if($this->session->userdata('res_id')==$this->get('id')){
-		$data['record']=$this->branch_model->get_branch($this->get('bid'),$this->session->userdata('res_id'));
+		$data['record']=$this->branch_model->get_branch($this->get('bid'));
 		$this->load->view('ajaxBranchViewer',$data);
 		}
 		else
@@ -134,7 +144,6 @@ class rest_admin extends REST_Controller {
 	function edit_list_get()
 	{
 
-		
 		$data['note']=$this->session->flashdata('note');		
 		$data['class']=$this->session->flashdata('class');
 		$d=$this->get('list_type');
@@ -249,17 +258,56 @@ class rest_admin extends REST_Controller {
 	
 	function map_get()
 	{
-		    $temp=$this->branch_model->get_details();
-			$data['type']=$temp['type'];
+			$temp=$this->branch_model->get_details();
 			$data['name']=$temp['name'];
+			$data['logo']=$temp['logo'];
 			$data['record']=$this->branch_model->get_map_position($this->session->userdata('res_id'));
 			$data['main_content'] = 'add_to_map';
+			
 			$this->load->view('includes/template',$data);
 	}
 	
-	function add_map_get()
+	function add_worker_get()
 	{
-		$this->branch_model->add_map_position($this->session->userdata('res_id'));
-		redirect('rest_admin/map');
+			$this->load->model('manager_model');
+			$data['record2']=$this->manager_model->get_groups(1);
+			$data['record1']=$this->branch_model->get_myres($this->session->userdata('res_id'));
+			$data['main_content'] = 'branch/add_worker';
+			$this->load->view('includes/template',$data);
+	}
+	
+	function edit_workers_get()
+	{
+			$data['record']=$this->branch_model->get_allworker();
+			$data['main_content'] = 'branch/edit_workers';
+			$this->load->view('includes/template',$data);
+	}
+	
+	function add_worker_post()
+	{
+			$data['msg']=$this->branch_model->add_worker();
+			$data['main_content'] = 'branch/add_worker';
+			$this->load->view('includes/template',$data);
+	}
+	
+	function view_worker_details_get()
+	{
+	$this->load->model('manager_model');
+		$data['record']=$this->branch_model->view_worker($this->get('id'));
+			$data['record2']=$this->manager_model->get_groups(1);
+			$data['record1']=$this->branch_model->get_myres($this->session->userdata('res_id'));
+		$this->load->view('branch/one_worker',$data);
+		
+	}
+	function update_worker_post()
+	{
+		$this->branch_model->update_worker();
+		redirect('rest_admin/edit_workers');
+	}
+	
+	function delete_worker_get()
+	{
+		$this->branch_model->delete_worker($this->get('id'),$this->get('u_id'));
+		//redirect('rest_admin/edit_workers');
 	}
 }

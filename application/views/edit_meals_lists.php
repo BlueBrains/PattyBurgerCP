@@ -50,7 +50,7 @@ xmlhttp.open("GET",base_url+controller+"/delete_list/id/"+<?php echo $this->sess
 													<select class="form-control chzn-select" name="list_type" id="list_type">
 														<?php if(isset($record1)&&is_array($record1)):?>
 														<?php foreach ($record1 as $rows):?>
-														 <option value="<?php echo $rows->id ?>" > <?php echo $rows->lists_name?></option>
+														 <option value="<?php echo $rows->id ?>" > <?php echo $rows->name?></option>
 														<?php endforeach;?>
 														<?php endif;?>
 													</select>
@@ -73,16 +73,30 @@ xmlhttp.open("GET",base_url+controller+"/delete_list/id/"+<?php echo $this->sess
 								<div class="panel-body" style="width : 90%">
 									<form action ="<?php echo base_url()?>rest_admin/add_list" method="post">
 										<div class="row">
-										<div class="col-lg-8">
+										<div class="col-lg-12">
 										<div class="form-group">
 										<label >New Tab Name :</label>
 											    <div class="form-group" style="direction: rtl;">
 													
-													<input type="text" class="form-control" name="listname" id="phone2" value="" placeholder="ADD No existing Tab">
+													<input type="text" class="form-control" name="listname" value="" placeholder="اسم القائمة الجديدة">
 												</div>
 
 										</div>
 										</div>
+										</div>
+										<div class="row">
+										<div class="col-lg-12">
+										<div class="form-group">
+										<label >New Tab Name :</label>
+											    <div class="form-group" style="direction: rtl;">
+													
+													<input type="text" class="form-control" name="description"  value="" placeholder="وصف القائمة">
+												</div>
+
+										</div>
+										</div>
+										</div>
+										<div class="row">
 										<div class="col-lg-4">
 													<button type="submit" class="btn btn-success" style="margin-top: 25px;">ADD This List </button>
 										</div>

@@ -5,9 +5,14 @@ class manager extends REST_Controller {
 	function __construct() {
 		parent::__construct();
 		$this->load->library('session');
-		$this->load->library('pagination');
-		$this->load->model('manager_model');
 		 header('Content-Type: text/html; charset=utf-8');
+		 
+		 if($this->session->userdata('logged_in')&&($this->session->userdata('role')==1)){
+			$this->load->library('pagination');
+			$this->load->model('manager_model');
+		 }
+		 else
+			redirect("auth");
 	}
 	
 	function index_get()
@@ -17,16 +22,16 @@ class manager extends REST_Controller {
 			$this->load->view('includes/template',$data);
 	}
 	
-	function singup_get()
+	function signup_get()
 	{
 			$data['record']=$this->manager_model->get_types();
 		    $data['main_content'] = 'homepage';	
 			$this->load->view('includes/template',$data);
 	}
 	
-	function singup_post()
+	function signup_post()
 	{
-			$this->manager_model->singup();
+			$this->manager_model->signup();
 			redirect('manager/index');
 	}
 
@@ -45,7 +50,10 @@ class manager extends REST_Controller {
 	
 	function view_details_get()
 	{
-		$data['record']=$this->manager_model->view_res($this->get('id'));
+		$x=$this->manager_model->view_res($this->get('id'));
+		$data['record']=$x[1];
+		$data['branches']=$x[2];
+		$data['number']=$x[3];
 		$this->load->view('one_res',$data);
 	}
 	
@@ -92,5 +100,34 @@ class manager extends REST_Controller {
 		redirect('manager/edit_types');
 	}
 	
+	function edit_groups_get()
+	{
+		$data['record'] = $this->manager_model->get_groups();
+		$data['main_content'] = 'edit_groups';	
+		$this->load->view('includes/template',$data);
+	}
 	
+	function add_group_post()
+	{
+		$this->manager_model->add_group();
+		redirect('manager/edit_groups');
+	}
+	
+	function get_group_get()
+	{
+		$data['record'] =$this->manager_model->get_group($this->get('id'));
+		$this->load->view('one_group',$data);
+	}
+	
+	function update_group_post()
+	{
+		$this->manager_model->update_group($this->input->post('id'));
+		redirect('manager/edit_groups');
+	}
+	
+	function delete_group_get()
+	{
+		$this->manager_model->delete_group($this->get('id'));
+		redirect('manager/edit_groups');
+	}
 }

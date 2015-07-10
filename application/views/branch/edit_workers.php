@@ -3,7 +3,7 @@
         var base_url = "<?php echo base_url();?>";
         var controller = 'rest_admin';
     </script>
-<script type="text/javascript">
+<script>
 function view_details(str) {
   if (str=="") {
     document.getElementById("itemform").innerHTML="";
@@ -20,11 +20,12 @@ function view_details(str) {
       document.getElementById("itemform").innerHTML=xmlhttp.responseText;
     }
   }
-  xmlhttp.open("GET",base_url+controller+"/view_details/id/"+<?php echo $this->session->userdata('res_id');?>+"/bid/"+str,true);
+  xmlhttp.open("GET",base_url+controller+"/view_worker_details/id/"+str,true);
   xmlhttp.send();
 }
 
-function delete_res(str) {
+
+function delete_res(str,str1) {
 var r=confirm("هل انت متأكد من الحذف ؟؟؟؟");
 if(r)
 {
@@ -39,33 +40,53 @@ if (window.XMLHttpRequest) {
      location.reload(true);
     }
   } 
-xmlhttp.open("GET",base_url+controller+"/delete_res_branch/id/"+<?php echo $this->session->userdata('res_id');?>+"/bid/"+str,true);
+xmlhttp.open("GET",base_url+controller+"/delete_worker/id/"+str+"/u_id/"+str1,true);
   xmlhttp.send();
   }
 }
 </script>
-  <div class="row">
+
+  <div class="row" style="text-align : right">
+  <div class="col-lg-6">
+  <h1>
+                         لوحة التحكم بالموظفين
+                        </h1>
+						
+						<div class="panel panel-primary" >
+                            <div class="panel-heading">
+                                <h3 class="panel-title">عرض بيانات الموظف</h3>
+                            </div>
+							<center>
+								<div class="panel-body" style="width : 90%">
+									<div  id="itemform" > 
+
+									</div>
+								</div>
+							</center>
+							</div>
+                        
+	</div>				
 <div class="col-lg-6">
-<h1>الفروع الموجودة حتى الآن</h1>
-<div class="table-responsive">
+<h1>الموظفين الذين يعملون لدينا</h1>
+<div class="table-responsive" style="direction: rtl;">
 										<table class="table table-bordered table-hover table-striped" style="text-align: center;">
 											<thead>
 												<tr>
-													<th >العنوان</th>
-													<th >رقم الهاتف</th>
-													<th >التوصيل</th>
-													<th ></th>
+													<th style="text-align : right">اسم الموظف</th>
+													<th style="text-align : right">الفرع الذي يعمل به</th>
+													<th style="text-align : right">منصبه</th>
+													<th style="text-align : right"></th>
 												</tr>
 											</thead>
 											<tbody>	
 											<?php if(isset($record) && is_array($record)):?>
 											<?php foreach($record as $row):?>
 											<tr>								
+												<td><?php echo $row->first_name." ".$row->last_name;?></td>
 												<td><?php echo $row->address;?></td>
-												<td><?php echo $row->phone_nbr_1;?></td>
-												<td><?php if($row->deliverable)echo "يوجد توصيل"; else echo "لا يوجد توصيل";?></td>
-												<td><input type="button" class="btn btn-info" onclick="view_details(<?php echo  $row->id ;?>)" value="View">
-												<input type="button" class="btn btn-danger" onclick="delete_res(<?php echo $row->id ;?>)" value="Delete">
+												<td><?php echo $row->gname;?></td>
+												<td><input type="button" class="btn btn-info" onclick="view_details(<?php echo  $row->w_id ;?>)" value="استعراض">
+												<input type="button" class="btn btn-danger" onclick="delete_res(<?php echo $row->w_id ;?>,<?php echo $row->user_id;?>)" value="حذف">
 												</td>												
 											</tr>
 											<?php endforeach;?>
@@ -75,24 +96,4 @@ xmlhttp.open("GET",base_url+controller+"/delete_res_branch/id/"+<?php echo $this
 <?php echo $this->pagination->create_links(); ?>
 </div>
 </div>
-<div class="col-lg-6">
-						<div class="panel panel-primary" >
-                            <div class="panel-heading">
-                                <h3 class="panel-title">View Branches Details</h3>
-                            </div>
-							<center>
-								<div class="panel-body" style="width : 90%">
-									<div  id="itemform" > 
-										<?php if(isset($note)):?>
-											<div class="alert alert-<?php echo $class?> alert-dismissable">
-												<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-												<?php echo $note?>.
-											</div>
-											<?php endif;?>
-									</div>
-								</div>
-							</center>
-							</div>
-                        
-	</div>		
 </div>

@@ -49,7 +49,7 @@ function meal_search()
 													<select class="form-control chzn-select" name="meal_list" id="meal_list">
 														<?php if(isset($record1)&&is_array($record1)):?>
 														<?php foreach ($record1 as $rows):?>
-														 <option value="<?php echo $rows->id ?>" > <?php echo $rows->lists_name?></option>
+														 <option value="<?php echo $rows->id ?>" > <?php echo $rows->name?></option>
 														<?php endforeach;?>
 														<?php endif;?>
 													</select>

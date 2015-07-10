@@ -39,9 +39,14 @@ class Migration_Restaurant extends CI_Migration {
 				'constraint'=>255,
 				'default'=>'unknown'
 			),
-			'rate'=>array(
-				'type'=>'tinyint',
-				'constraint'=>1,
+			'rating'=>array(
+				'type'=>'int',
+				'constraint'=>11,
+				'default'=>0
+			),
+			'people_number'=>array(
+				'type'=>'int',
+				'constraint'=>11,
 				'default'=>0
 			),
 			'price_range'=>array(
@@ -97,17 +102,15 @@ class Migration_Restaurant extends CI_Migration {
 				'type'=>'boolean',
 				'default'=>0
 			),
-			'delivered'=>array(
+			'deliverable'=>array(
 				'type'=>'boolean',
 				'default'=>0
 			),
 			'lat' => array(
-				'type'=>'int',
-				'constraint'=>25,
+				'type'=>'double',
 			),
 			'lng' => array(
-				'type'=>'int',
-				'constraint'=>25,
+				'type'=>'double',
 			)
 		)); 	  
 		$this->dbforge->add_key('id',TRUE);
@@ -125,10 +128,6 @@ class Migration_Restaurant extends CI_Migration {
 				'type'=>'varchar',
 				'constraint'=>255,
 				'default'=>'unknown'
-			),
-			'accept'=>array( //a category can't be accepted and shown until admin approval
-				'type'=>'boolean',
-				'default'=>0
 			)
 		)); 	  
 		$this->dbforge->add_key('id',TRUE);
@@ -203,9 +202,14 @@ class Migration_Restaurant extends CI_Migration {
 			'preparing_time' => array(
 				'type'=>'int',
 			),
-			'rate'=>array(
-				'type'=>'tinyint',
-				'constraint'=>1,
+			'rating'=>array(
+				'type'=>'int',
+				'constraint'=>11,
+				'default'=>0
+			),
+			'people_number'=>array(
+				'type'=>'int',
+				'constraint'=>11,
 				'default'=>0
 			),
 			'image'=>array(
@@ -228,24 +232,10 @@ class Migration_Restaurant extends CI_Migration {
 				'type'=>'int',
 				'constraint'=>11,
 			),
-			'first_name'=>array(
-				'type'=>'varchar',
-				'constraint'=>255,
-				'default'=>'unNamedMeal'
-			),
-			'last_name'=>array(
-				'type'=>'varchar',
-				'constraint'=>255,
-				'default'=>'unNamedMeal'
-			),				
-			'mobile_nbr'=>array( 
-				'type'=>'varchar',
-				'constraint'=>255,
-				'default'=>'unknown'
-			),			
-			'gender'=>array(
-				'type'=>'text',
-			),
+			'user_id' => array( //for authentication 
+				'type'=>'int',
+				'constraint'=>11,
+			),						
 			'identification_nbr'=>array( 
 				'type'=>'varchar',
 				'constraint'=>255,
