@@ -54,7 +54,11 @@ class manager_model extends CI_Model {
 				    $file_size =$_FILES['fic']['size'];
 				    $file_tmp =$_FILES['fic']['tmp_name'];
 				    $file_type=$_FILES['fic']['type'];
-					$location=realpath($_SERVER['DOCUMENT_ROOT'])."\\burger_ownercp\\uploads\\res".$i."\\".$file_name;
+					
+					if (!file_exists ($path."/uploads/res".$this->session->userdata('res_id')))
+						mkdir($path."/uploads/res".$this->session->userdata('res_id'),0777,TRUE);
+					
+					$location=realpath($_SERVER['DOCUMENT_ROOT'])."/burger_ownercp/uploads/res".$i."/".$file_name;
 	        	 	move_uploaded_file($file_tmp, $location);
 					$d = $this->compress($location, $location, 30);
 
@@ -107,9 +111,9 @@ class manager_model extends CI_Model {
 				}
 				/* delete meals and lists and unlink meals*/
 				$this->db->query("DELETE FROM restaurant WHERE id = '".$id."'");
-				$files = glob(realpath($_SERVER['DOCUMENT_ROOT'])."\\burger_ownercp\\upload\\*"); // get all file names
+				$files = glob(realpath($_SERVER['DOCUMENT_ROOT'])."/burger_ownercp/uploads/*"); // get all file names
 				foreach($files as $file){ // iterate files
-				  if(is_file($file) && ($file == realpath($_SERVER["DOCUMENT_ROOT"])."\\burger_ownercp\\upload\\".$data[0]->res_logo))
+				  if(is_file($file) && ($file == realpath($_SERVER["DOCUMENT_ROOT"])."/burger_ownercp/uploads/".$data[0]->res_logo))
 				  
 					unlink($file); // delete file
 				}

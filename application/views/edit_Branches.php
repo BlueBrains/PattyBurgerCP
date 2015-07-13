@@ -63,7 +63,7 @@ xmlhttp.open("GET",base_url+controller+"/delete_res_branch/id/"+<?php echo $this
 											<tr>								
 												<td><?php echo $row->address;?></td>
 												<td><?php echo $row->phone_nbr_1;?></td>
-												<td><?php if($row->deliverable)echo "يوجد توصيل"; else echo "لا يوجد توصيل";?></td>
+												<td><?php if($row->deliverable) echo "يوجد توصيل"; else echo "لا يوجد توصيل";?></td>
 												<td><input type="button" class="btn btn-info" onclick="view_details(<?php echo  $row->id ;?>)" value="View">
 												<input type="button" class="btn btn-danger" onclick="delete_res(<?php echo $row->id ;?>)" value="Delete">
 												</td>												

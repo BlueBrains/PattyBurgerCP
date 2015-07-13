@@ -45,11 +45,12 @@ class branch_model extends CI_Model {
 				    $file_tmp =$_FILES['fic']['tmp_name'];
 				    $file_type=$_FILES['fic']['type'];
 					
-					$location=realpath($_SERVER['DOCUMENT_ROOT'])."\\burger_ownercp\\uploads\\res".$this->session->userdata('res_id')."\\mealimg\\".$file_name;
+					$location=realpath($_SERVER['DOCUMENT_ROOT'])."/burger_ownercp/uploads/res".$this->session->userdata('branch_id')."/mealimg/".$file_name;
 	        	 	move_uploaded_file($file_tmp, $location);
 					$d = $this->compress($location, $location, 30);
 					
 		}
+		
 		$sql=$this->db->query($q,array($this->input->post('meal_name'),$this->input->post('meal_price'),$this->input->post('meal_discount'),$this->input->post('meal_list'),$this->input->post('meal_description'),$file_name,$id));
 		if ($this->db->trans_status() === FALSE)
 					 {
@@ -107,11 +108,15 @@ class branch_model extends CI_Model {
 				    $file_tmp =$_FILES['fic']['tmp_name'];
 				    $file_type=$_FILES['fic']['type'];
 					$path=getcwd();
-					if (!file_exists ($path."\\uploads\\res".$this->session->userdata('res_id')."\\mealimg"))
-						mkdir($path."\\uploads\\res".$this->session->userdata('res_id')."\\mealimg",0777,TRUE);
-					$location=realpath($_SERVER['DOCUMENT_ROOT'])."\\burger_ownercp\\uploads\\res".$this->session->userdata('res_id')."\\mealimg\\".$file_name;
+					if (!file_exists ($path."/uploads/res".$this->session->userdata('branch_id')."/mealimg"))
+						mkdir($path."/uploads/res".$this->session->userdata('branch_id')."/mealimg",0777,TRUE);
+					$location=realpath($_SERVER['DOCUMENT_ROOT'])."/burger_ownercp/uploads/res".$this->session->userdata('branch_id')."/mealimg/".$file_name;
 	        	 	move_uploaded_file($file_tmp, $location);
 					$d = $this->compress($location, $location, 30);
+			}
+			else {
+			$location=realpath($_SERVER['DOCUMENT_ROOT'])."/burger_ownercp/uploads/res".$this->session->userdata('branch_id')."/mealimg/meal.JPG";
+			copy('uploads/default/meal.JPG',$location);
 			}
 			$q="UPDATE res_meal SET image=? where id=?";
 			$this->db->query($q,array($file_name,$r));

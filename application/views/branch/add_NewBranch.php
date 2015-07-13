@@ -133,8 +133,8 @@
 													<div class="col-lg-2"></div>
 														<div class="col-lg-6">	
 														  <select class="form-control" name="delivered">
-															<option value='0'>يوجد</option>
-															<option value='1'>لا يوجد</option>
+															<option value='1'>يوجد</option>
+															<option value='0'>لا يوجد</option>
 														  </select>
 														</div>	
 														<div class="col-lg-4">
