@@ -54,12 +54,14 @@ class manager_model extends CI_Model {
 				    $file_size =$_FILES['fic']['size'];
 				    $file_tmp =$_FILES['fic']['tmp_name'];
 				    $file_type=$_FILES['fic']['type'];
-					
+					/*
 					if (!file_exists ($path."/uploads/res".$this->session->userdata('res_id')))
 						mkdir($path."/uploads/res".$this->session->userdata('res_id'),0777,TRUE);
 					
 					$location=realpath($_SERVER['DOCUMENT_ROOT'])."/burger_ownercp/uploads/res".$i."/".$file_name;
-	        	 	move_uploaded_file($file_tmp, $location);
+	        	 	*/
+					$location=realpath($_SERVER['DOCUMENT_ROOT'])."/burger_ownercp/uploads/".$file_name;
+					move_uploaded_file($file_tmp, $location);
 					$d = $this->compress($location, $location, 30);
 
 			}

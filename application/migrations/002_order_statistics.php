@@ -83,6 +83,10 @@ class Migration_order_statistics extends CI_Migration{
 				'type'=>'int',
 				'constraint'=>11
 			),
+			'number'=>array(
+				'type'=>'int',
+				'constraint'=>11
+			),
 	)); 
 		$this->dbforge->add_key('id',TRUE);	
 		$this->dbforge->create_table('meals_order',TRUE);
