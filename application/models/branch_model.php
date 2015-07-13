@@ -2,9 +2,12 @@
 
 class branch_model extends CI_Model {
 	
-	function get_meals($id)
+	function get_meals($id,$c_id=0)
 	{
-		$sql=$this->db->query("SELECT * FROM meal where id='".$id."'");
+		if($c_id==0)
+			$sql=$this->db->query("SELECT * FROM meal inner join res_meal on meal.id=res_meal.meal_id where res_meal.id='".$id."'");
+		else 	
+			$sql=$this->db->query("SELECT * FROM meal where category_id='".$c_id."'");
 				foreach ($sql->result() as $raw ) {
 					$data[]=$raw;
 				}
@@ -66,25 +69,34 @@ class branch_model extends CI_Model {
 			'name'=> $this->input->post('listname'),
 			'description'=> $this->input->post('description')
 			);				
-			$insert = $this->db->insert('meals_category', $new_insert_data);
-
-			
+			$insert = $this->db->insert('meals_category', $new_insert_data);		
+	}
+	
+	function add_new_meal()
+	{
+		$new_insert_data = array(
+			'name'=> $this->input->post('name'),
+			'category_id'=> $this->input->post('list_id'),
+			'description'=> $this->input->post('description')
+			);				
+			$insert = $this->db->insert('meal', $new_insert_data);		
 	}
 	
 	function add_meal()
 	{
 		$this->db->trans_begin();
-
-		$new_insert_data = array(
-			'list_id'=> $this->input->post('meal_list'),
-			'name'=>  $this->input->post('meal_name'),
-			'price'=>  $this->input->post('meal_price'),
-			'discount'=>  $this->input->post('meal_discount'),
-			'description'=>  $this->input->post('meal_description')
+		$file_name="meal.JPG";
+		
+			$new_insert_data1 = array(
+			'meal_id'=> $this->input->post('meal_id'),
+			'res_id'=> $this->session->userdata('branch_id'),
+			'details'=> $this->input->post('details'),
+			'price'=> $this->input->post('price'),
+			'preparing_time'=> $this->input->post('preparing_time')
 			);				
-			$insert = $this->db->insert('meal', $new_insert_data);
+			$insert = $this->db->insert('res_meal', $new_insert_data1);	
 			$r=mysql_insert_id();
-		if(!empty($_FILES['fic']['name']))
+			if(!empty($_FILES['fic']['name']))
 			{
 					$ext=explode(".",strtolower($_FILES['fic']['name']));
 		 			$extension=array_pop($ext);
@@ -100,18 +112,9 @@ class branch_model extends CI_Model {
 					$location=realpath($_SERVER['DOCUMENT_ROOT'])."\\burger_ownercp\\uploads\\res".$this->session->userdata('res_id')."\\mealimg\\".$file_name;
 	        	 	move_uploaded_file($file_tmp, $location);
 					$d = $this->compress($location, $location, 30);
-					
-					$q="UPDATE meal SET meal_img=? where id='".$r."' ";
-		   
-		            $sql=$this->db->query($q,$file_name);
 			}
-		
-				$new_insert_data1 = array(
-			'list_id'=> $this->input->post('meal_list'),
-			'res_id'=> $this->session->userdata('res_id')
-			
-			);				
-			$insert = $this->db->insert('list_res', $new_insert_data1);	
+			$q="UPDATE res_meal SET image=? where id=?";
+			$this->db->query($q,array($file_name,$r));
 		if ($this->db->trans_status() === FALSE)
 					 {
 						$this->db->trans_rollback();
@@ -223,7 +226,7 @@ class branch_model extends CI_Model {
 	
 	function get_specific_lists($id)
 	{
-				$q="SELECT * FROM res_meal inner join meal on meal.id=res_meal.meal_id where category_id='".$id."' and res_id='".$this->session->userdata('branch_id')."'";
+				$q="SELECT *,res_meal.id as r_id FROM res_meal inner join meal on meal.id=res_meal.meal_id where category_id='".$id."' and res_id='".$this->session->userdata('branch_id')."'";
 				$config['base_url'] = base_url().'rest_admin/edit_list/id/'.$this->session->userdata('res_id').'/list_type/'.$id;
 				
 					$limit = 10;
@@ -480,6 +483,200 @@ class branch_model extends CI_Model {
 		 $sql=$this->db->query($q,$u_id); 
 		$q="DELETE FROM users WHERE id =?";
 		 $sql=$this->db->query($q,$u_id);
+	}
+
+	function get_allrequest()
+	{
+		$q="SELECT customer.id as cid, branch_id,orders.id as id ,first_name , last_name , CONCAT_WS('',first_name, last_name) as c_name , Order_time ,expected_finish_time,delivery,order_status
+				FROM  orders inner join customer on customer.id=orders.cust_id
+					  where verified=1 and branch_id=? ";
+				
+				$config['base_url'] = base_url().'rest_admin/all_request';
+				
+					$limit = 20;
+				$offset = ($this->uri->segment(4) != '' ? $this->uri->segment(4):0);
+				//echo'<script type="text/javascript">alert('.$offset.');</script>';
+				$config['total_rows'] = $this->db->query($q,array($this->session->userdata('branch_id')))->num_rows;
+				$config['per_page'] = $limit;
+				$config['num_links'] = 25;
+				$q .= " limit ".$limit." offset ".$offset;
+				$this->pagination->initialize($config);
+			
+			$sql=$this->db->query($q,array($this->session->userdata('branch_id')));
+				
+				foreach ($sql->result() as $raw ) {
+					$data[]=$raw;
+				}
+			
+			if ($sql->num_rows > 0)
+           { 
+			 return $data; 
+			}
+			else 
+				return false;
+	}
+	
+	function get_notready_request()
+	{
+		$q="SELECT customer.id as cid, branch_id,orders.id as id ,first_name , last_name , CONCAT_WS('',first_name, last_name) as c_name , Order_time ,expected_finish_time,delivery,order_status
+				FROM  orders inner join customer on customer.id=orders.cust_id
+					  where verified=1 and order_status =1 and branch_id=? ";
+				
+				$config['base_url'] = base_url().'rest_admin/all_request';
+				
+					$limit = 20;
+				$offset = ($this->uri->segment(4) != '' ? $this->uri->segment(4):0);
+				//echo'<script type="text/javascript">alert('.$offset.');</script>';
+				$config['total_rows'] = $this->db->query($q,array($this->session->userdata('branch_id')))->num_rows;
+				$config['per_page'] = $limit;
+				$config['num_links'] = 25;
+				$q .= " limit ".$limit." offset ".$offset;
+				$this->pagination->initialize($config);
+			
+			$sql=$this->db->query($q,array($this->session->userdata('branch_id')));
+				
+				foreach ($sql->result() as $raw ) {
+					$data[]=$raw;
+				}
+			
+			if ($sql->num_rows > 0)
+           { 
+			 return $data; 
+			}
+			else 
+				return false;
+	}
+	
+	function onway_request()
+		{
+		$q="SELECT customer.id as cid, branch_id,orders.id as id ,first_name , last_name , CONCAT_WS('',first_name, last_name) as c_name , Order_time ,expected_finish_time,delivery,order_status
+				FROM  orders inner join customer on customer.id=orders.cust_id
+					  where verified=1 and order_status =2 and branch_id=? ";
+				
+				$config['base_url'] = base_url().'rest_admin/all_request';
+				
+					$limit = 20;
+				$offset = ($this->uri->segment(4) != '' ? $this->uri->segment(4):0);
+				//echo'<script type="text/javascript">alert('.$offset.');</script>';
+				$config['total_rows'] = $this->db->query($q,array($this->session->userdata('branch_id')))->num_rows;
+				$config['per_page'] = $limit;
+				$config['num_links'] = 25;
+				$q .= " limit ".$limit." offset ".$offset;
+				$this->pagination->initialize($config);
+			
+			$sql=$this->db->query($q,array($this->session->userdata('branch_id')));
+				
+				foreach ($sql->result() as $raw ) {
+					$data[]=$raw;
+				}
+			
+			if ($sql->num_rows > 0)
+           { 
+			 return $data; 
+			}
+			else 
+				return false;
+	}
+	
+	function delieverd_request(){
+		$q="SELECT customer.id as cid, branch_id,orders.id as id ,first_name , last_name , CONCAT_WS('',first_name, last_name) as c_name , Order_time ,expected_finish_time,delivery,order_status
+				FROM  orders inner join customer on customer.id=orders.cust_id
+					  where verified=1 and order_status =4 and branch_id=? ";
+				
+				$config['base_url'] = base_url().'rest_admin/all_request';
+				
+					$limit = 20;
+				$offset = ($this->uri->segment(4) != '' ? $this->uri->segment(4):0);
+				//echo'<script type="text/javascript">alert('.$offset.');</script>';
+				$config['total_rows'] = $this->db->query($q,array($this->session->userdata('branch_id')))->num_rows;
+				$config['per_page'] = $limit;
+				$config['num_links'] = 25;
+				$q .= " limit ".$limit." offset ".$offset;
+				$this->pagination->initialize($config);
+			
+			$sql=$this->db->query($q,array($this->session->userdata('branch_id')));
+				
+				foreach ($sql->result() as $raw ) {
+					$data[]=$raw;
+				}
+			
+			if ($sql->num_rows > 0)
+           { 
+			 return $data; 
+			}
+			else 
+				return false;
+	}
+	
+	function delete_order($id)
+	{
+		$q="UPDATE orders SET order_status=-1 where id=?";
+		$sql=$this->db->query($q,array($id));
+	}
+	function order_active($id)
+	{
+		$q="UPDATE orders SET order_status=1 where id=?";
+		$sql=$this->db->query($q,array($id));
+	}
+	function ch_to_ready($id)
+	{
+		$q="UPDATE orders SET order_status=2 where id=?";
+		$sql=$this->db->query($q,array($id));
+	}
+	
+	function ch_to_finished($id){
+		$q="UPDATE orders SET order_status=4 where id=?";
+		$sql=$this->db->query($q,array($id));
+	}
+	
+	function block_cust($id)
+	{
+		$q="UPDATE customer SET verified=-1 where id=?";
+		$sql=$this->db->query($q,array($id));
+	}
+	
+	function view_order_details($id,$cust){
+		$q="SELECT orders.id , distination_address , mobile_nbr ,res_meal.details ,customer.id as cid ,first_name , last_name , CONCAT_WS('',first_name, last_name) as c_name , bill_value 
+				, meal.name as m_name , meals_order.number as num , price
+				FROM  orders inner join customer on customer.id=orders.cust_id
+				             inner join meals_order on  meals_order.orders_id = orders.id
+							 inner join res_meal on res_meal.id = meals_order.res_meal_id
+							 inner join meal on meal.id=res_meal.meal_id
+					  where orders.id=? ";
+		$sql=$this->db->query($q,array($id));
+		foreach ($sql->result() as $raw ) {
+					$data[]=$raw;
+				}
+		$q0="SELECT customer.id
+				FROM customer inner join trusted_customer on customer.id=trusted_customer.customer_id
+					  where customer.id=? and res_id=?";
+		$sql0=$this->db->query($q0,array($cust,$this->session->userdata('res_id')));
+		
+		if ($sql->num_rows > 0)
+           { 
+			 $res[0]=$sql->num_rows;
+			 $res[1]=$sql0->num_rows;
+			 $res[2]=$data;
+			 return $res; 
+			}
+			else 
+				return false;			  
+	}
+	
+	function trust_him($id){
+	$new_insert_data = array(
+			'res_id'=>$this->session->userdata('res_id'),
+			'customer_id'=>$id
+			);
+			
+			$insert = $this->db->insert('trusted_customer', $new_insert_data);
+		return 1;
+	}
+	
+	function untrust_him($id){
+		$q="DELETE FROM trusted_customer WHERE customer_id=? and res_id=?";
+		 $sql=$this->db->query($q,array($id,$this->session->userdata('res_id')));
+		 return 0;
 	}
 	
 	function compress($source, $destination, $quality) {

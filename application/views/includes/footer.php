@@ -45,6 +45,22 @@
     
     <!-- AdminLTE for demo purposes -->
     <script src="<?php echo base_url()?>assets/dist/js/demo.js" type="text/javascript"></script>
+	
+	<div id="delete" class="delete">
+		
+		<script src="<?php echo base_url();?>select/js/jquery-migrate-1.0.0.min.js"></script>
+	
+		<script src="<?php echo base_url();?>select/js/jquery-ui-1.10.0.custom.min.js"></script>
+		
+		<script src="<?php echo base_url();?>select/js/jquery.chosen.min.js"></script>
+	
+		<script src="<?php echo base_url();?>select/js/jquery.uniform.min.js"></script>
+		
+		<script src="<?php echo base_url();?>select/js/jquery.cleditor.min.js"></script>
+
+		<script src="<?php echo base_url();?>select/js/custom.js"></script>
+		
+</div>		
 
   </body>
 </html>

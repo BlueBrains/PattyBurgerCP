@@ -31,14 +31,14 @@ xmlhttp.open("GET",base_url+controller+"/delete_list/id/"+<?php echo $this->sess
 	<?php echo $note?>.
 </div>
 <?php endif;?>  
-  <div class="row">
+  <div class="row" style="direction: rtl;">
 <h1>
-                         Menu Lists Editions
+                         لوحة التحكم بالقوائم
                         </h1>
 					<div class="col-lg-6">
 						<div class="panel panel-primary" >
                             <div class="panel-heading">
-                                <h3 class="panel-title">Move to List Meals</h3>
+                                <h3 class="panel-title">الانتقال إلى وجبات هذه القائمة</h3>
                             </div>
 							<center>
 								<div class="panel-body" style="width : 90%">

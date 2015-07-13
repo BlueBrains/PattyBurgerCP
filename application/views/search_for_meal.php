@@ -27,53 +27,12 @@ function meal_search()
   xmlhttp.send();
 }
 </script>
-<div class="row">
-  <h1>
-                       Fast Searching
-                        </h1>
-  <div class="col-lg-6">
-						<div class="panel panel-primary" >
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Enter The Meal Name</h3>
-                            </div>
-							<center>
-								<div class="panel-body" style="width : 90%">
-									
-										<div class="row">
-											    <div class="form-group" style="direction: rtl;">
-													<label >Meal Name</label>
-													<input type="text" class="form-control" name="meal" id="mealsearchname" value="" placeholder="">
-												</div>
-												<div class="form-group">
-													<label >Meal Type</label>
-													<select class="form-control chzn-select" name="meal_list" id="meal_list">
-														<?php if(isset($record1)&&is_array($record1)):?>
-														<?php foreach ($record1 as $rows):?>
-														 <option value="<?php echo $rows->id ?>" > <?php echo $rows->name?></option>
-														<?php endforeach;?>
-														<?php endif;?>
-													</select>
-												</div>
-											<div class="row">
-											<p style="direction:rtl;">
-											<input type="hidden" value="<?php echo $this->session->userdata('res_id');?>" name='id'>
-											<button type="submit" onclick="meal_search()"  class="btn btn-success">Find it ! </button>
-											</p>
-											</div>
-
-											
-										</div>	
-						
-								</div>
-
-							</div>
-               </center>         
-	</div>						
+<div class="row" style="direction: rtl;">					
  <div class="col-lg-6">
 						<div  id="mealform" > 
 						<div class="panel panel-primary" >
                             <div class="panel-heading">
-                                <h3 class="panel-title">SHOW Results</h3>
+                                <h3 class="panel-title">إظهار النتائج</h3>
                             </div>
 							<center>
 								<div class="panel-body" style="width : 90%">
@@ -90,5 +49,45 @@ function meal_search()
                        </div> 
 </div>	
   
+  <h1>
+                       البحث السريع
+                        </h1>
+  <div class="col-lg-6">
+						<div class="panel panel-primary" >
+                            <div class="panel-heading">
+                                <h3 class="panel-title">ادخل اسم الوجبة</h3>
+                            </div>
+							<center>
+								<div class="panel-body" style="width : 90%">
+									
+										<div class="row">
+											    <div class="form-group" style="direction: rtl;">
+													<label >اسم الوجبة</label>
+													<input type="text" class="form-control" name="meal" id="mealsearchname" value="" placeholder="">
+												</div>
+												<div class="form-group">
+													<label >قائمة الطعام</label>
+													<select class="form-control chzn-select" name="meal_list" id="meal_list">
+														<?php if(isset($record1)&&is_array($record1)):?>
+														<?php foreach ($record1 as $rows):?>
+														 <option value="<?php echo $rows->id ?>" > <?php echo $rows->name?></option>
+														<?php endforeach;?>
+														<?php endif;?>
+													</select>
+												</div>
+											<div class="row">
+											<p style="direction:rtl;">
+											<input type="hidden" value="<?php echo $this->session->userdata('res_id');?>" name='id'>
+											<button type="submit" onclick="meal_search()"  class="btn btn-success">جد لي وجبتي :D</button>
+											</p>
+											</div>
 
+											
+										</div>	
+						
+								</div>
+
+							</div>
+               </center>         
+	</div>	
 </div>

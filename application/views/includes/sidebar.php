@@ -109,10 +109,10 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href=""><i class="fa fa-circle-o text-aqua"></i>ALL Requests<span class="label label-info pull-right">12</span></a></li>
-                <li><a href=""><i class="fa fa-circle-o text-red"></i>Not Ready Requests<span class="label label-danger pull-right">2</span></a></li>
-                <li><a href=""><i class="fa fa-circle-o text-yellow"></i>ON the way<span class="label label-warning pull-right">7</span></a></li>
-                <li><a href=""><i class="fa fa-circle-o text-green"></i>Delivered Requests<span class="label label-success pull-right">3</span></a></li>
+                <li><a href="<?php echo base_url()?>rest_admin/all_request"><i class="fa fa-circle-o text-aqua"></i>ALL Requests<span class="label label-info pull-right">12</span></a></li>
+                <li><a href="<?php echo base_url()?>rest_admin/notready_request"><i class="fa fa-circle-o text-red"></i>Not Ready Requests<span class="label label-danger pull-right">2</span></a></li>
+                <li><a href="<?php echo base_url()?>rest_admin/onway_request"><i class="fa fa-circle-o text-yellow"></i>ON the way<span class="label label-warning pull-right">7</span></a></li>
+                <li><a href="<?php echo base_url()?>rest_admin/delieverd_request"><i class="fa fa-circle-o text-green"></i>Delivered Requests<span class="label label-success pull-right">3</span></a></li>
               </ul>
             </li>
 			<?php endif; ?>

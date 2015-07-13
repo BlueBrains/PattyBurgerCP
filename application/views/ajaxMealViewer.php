@@ -4,12 +4,12 @@
   <div class="col-lg-12">
 						<div class="panel panel-primary" >
                             <div class="panel-heading">
-                                <h3 class="panel-title">You can edit the Meal Details</h3>
+                                <h3 class="panel-title">يمكنك تعديل بيانات الوجبة</h3>
                             </div>
 							
 							<?php if(isset($num)&&($num>1)):?>
 								<div class="alert alert-info">
-									Number of Matching <?php echo $num;?><a href='<?php echo base_url()?>rest_admin/searched_res/id/<?php echo $id ?>/list_type/<?php echo $list_type ?>/mid/<?php echo $result ?>' class="alert-link">عرض جميع النتائج</a>.
+									عدد الوجبات المتطابقة <?php echo $num;?><a href='<?php echo base_url()?>rest_admin/searched_res/id/<?php echo $id ?>/list_type/<?php echo $list_type ?>/mid/<?php echo $result ?>' class="alert-link">عرض جميع النتائج</a>.
                                 </div>
 							<?php endif; ?>
 							
@@ -20,44 +20,44 @@
 											<?php foreach ($record as $rows):?>
 												<div class="row">
 													<div class="form-group" style="direction: rtl;">
-															<label >Meal name</label>
-															<input type="text" class="form-control" name="meal_name" id="user" value="<?php echo $rows->meal_name ?>" placeholder="اسم الوجبة">
+															<label >اسم الوجبة</label>
+															<input type="text" class="form-control" id="user" value="<?php echo $rows->name ?>" placeholder="اسم الوجبة" disabled>
 														</div>
 												</div>
 												<hr>
 												<div class="row">
 													<div class="col-lg-6">
 														<div class="form-group" style="direction: rtl;">
-															<label >Meal Price</label>
-															<input type="text" class="form-control" name="meal_price"  value="<?php echo $rows->meal_price ?>" placeholder=" سعر الوجبة">
+															<label >سعر الوجبة</label>
+															<input type="text" class="form-control" name="meal_price"  value="<?php echo $rows->price ?>" placeholder=" سعر الوجبة">
 														</div>
 														<div class="form-group" style="direction: rtl;">
-															<label >Discount</label>
-															<input type="text" class="form-control" name="meal_discount"  value="<?php echo $rows->meal_discount ?>" placeholder="نسبة التخفيض أو العرض ">
+															<label >الوقت المتوقع لإنهاء الطلب</label>
+															<input type="text" class="form-control" name="meal_discount"  value="<?php echo $rows->preparing_time ?>" placeholder="">
 														</div>
 														<div class="form-group" style="direction: rtl;">
-															<label >Meal Type</label>
+															<label >القائمة التي تنتمي إليها</label>
 															<select class="form-control chzn-select" name="meal_list">
 																<?php if(isset($record1)&&is_array($record1)):?>
 																<?php foreach ($record1 as $row):?>
-																 <option value="<?php echo $row->id ?>" <?php if($row->id == $rows->list_id) echo "selected"; ?>> <?php echo $row->lists_name?></option>
+																 <option value="<?php echo $row->id ?>" <?php if($row->id == $rows->category_id) echo "selected"; ?>> <?php echo $row->name?></option>
 																<?php endforeach;?>
 																<?php endif;?>
 															</select>
 														</div>
-														<?php if(strlen($rows->meal_img)>1):?>
-														<a  id="example1" href="<?php echo base_url().'uploads/res'.$this->session->userdata('res_id').'/mealimg/'.$rows->meal_img?>"  title="<?php echo $rows->meal_name ?>"><img  style="width: 100%;margin-top: 25px;"src="<?php echo base_url().'uploads/res'.$this->session->userdata('res_id').'/mealimg/'.$rows->meal_img?>" alt="" /></a>
+														<?php if(strlen($rows->image)>1):?>
+														<a  id="example1" href="<?php echo base_url().'uploads/res'.$this->session->userdata('branch_id').'/mealimg/'.$rows->image?>"  title="<?php echo $rows->name ?>"><img  style="width: 100%;margin-top: 25px;"src="<?php echo base_url().'uploads/res'.$this->session->userdata('branch_id').'/mealimg/'.$rows->image?>" alt="" /></a>
 														<?php else:?>
 														<a  id="example1" href="<?php echo base_url().'uploads/default/meal.jpg'?>"  title="ارفع صورة وجبتك"><img  style="width: 100%;margin-top: 20px;"src="<?php echo base_url().'uploads/default/meal.jpg'?>" alt="" /></a>
 														<?php endif;?>
 													</div>
 													<div class="col-lg-6">
 													<div class="form-group" style="direction: rtl;">
-															<label >Description</label>
-																<textarea name="meal_description" style="height: 200px;width: 100%;"><?php echo $rows->meal_description ?></textarea>
+															<label >التفاصيل</label>
+																<textarea name="meal_description" style="height: 200px;width: 100%;"><?php echo $rows->details ?></textarea>
 													</div>
 														<div class="row">
-															<label class="control-label">Change Meal Pic</label>
+															<label class="control-label">تغيير صورة الوجبة</label>
 														</div>
 														<div class="row">
 															<div class="form-group">
@@ -74,15 +74,15 @@
 													
 													<div class="row">
 													<center>
-													<input type="hidden" value="<?php echo $this->session->userdata('res_id');?>" name='id'>
+													<input type="hidden" value="<?php echo $this->session->userdata('branch_id');?>" name='id'>
 													<input type="hidden" value="<?php echo $p;?>" name='p'>	
 													<input type="hidden" value="<?php echo $list_type;?>" name='list_type'>	
 													<input type="hidden" value="<?php echo $rows->id;?>" name='meal_id'>
-													<input type="hidden" value="<?php echo $rows->meal_img;?>" name='meal_image'>													
+													<input type="hidden" value="<?php echo $rows->image;?>" name='meal_image'>													
 													
 													<p style="direction:rtl;">
 
-													<button type="submit" class="btn btn-info">Save Changes</button>
+													<button type="submit" class="btn btn-info">حفظ التعديلات</button>
 													</p>
 													</center>
 													</div>

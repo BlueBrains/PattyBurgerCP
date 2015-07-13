@@ -59,6 +59,7 @@ class rest_admin extends REST_Controller {
 	function edit_meals_get()
 	{
 
+		$data['record1']=$this->branch_model->get_meals(0,$this->get('id'));
 		$data['record'] =$this->branch_model->get_lists();
 		$data['main_content'] = 'edit_meals';	
 		$this->load->view('includes/template',$data);
@@ -309,5 +310,87 @@ class rest_admin extends REST_Controller {
 	{
 		$this->branch_model->delete_worker($this->get('id'),$this->get('u_id'));
 		//redirect('rest_admin/edit_workers');
+	}
+	
+	function get_meals_get(){
+		$data['record1']=$this->branch_model->get_meals(0,$this->get('id'));
+		$this->load->view('branch/ajaxMeals',$data);
+	}
+	
+	function add_meal_get(){
+			$data['record'] =$this->branch_model->get_lists();
+			$data['main_content'] = 'branch/add_meal';
+			$this->load->view('includes/template',$data);
+	}
+	
+	function add_meal_post(){
+		$this->branch_model->add_new_meal();
+		redirect('rest_admin/add_meal');
+	}
+	
+	function all_request_get(){
+			$data['record']=$this->branch_model->get_allrequest();
+			$data['main_content'] = 'branch/requests_viewer';
+			$this->load->view('includes/template',$data);
+	}
+	
+	function notready_request_get(){
+			$data['record']=$this->branch_model->get_notready_request();
+			$data['main_content'] = 'branch/requests_viewer';
+			$this->load->view('includes/template',$data);
+	}
+	
+	function onway_request_get()
+	{
+			$data['record']=$this->branch_model->onway_request();
+			$data['main_content'] = 'branch/requests_viewer';
+			$this->load->view('includes/template',$data);
+	}
+
+	function delieverd_request_get()
+	{
+			$data['record']=$this->branch_model->delieverd_request();
+			$data['main_content'] = 'branch/requests_viewer';
+			$this->load->view('includes/template',$data);
+	}
+	
+	function delete_order_get(){
+		$this->branch_model->delete_order($this->get('id'));
+		//redirect('rest_admin/all_request');
+	}
+	function block_cust_get(){
+		$this->branch_model->block_cust($this->get('id'));
+		//redirect('rest_admin/all_request');
+	}
+	function order_active_get(){
+		$this->branch_model->order_active($this->get('id'));
+		//redirect('rest_admin/all_request');
+	}
+	function ch_to_ready_get(){
+		$this->branch_model->ch_to_ready($this->get('id'));
+		//redirect('rest_admin/all_request');
+	}
+	function ch_to_finished_get(){
+		$this->branch_model->ch_to_finished($this->get('id'));
+		//redirect('rest_admin/all_request');
+	}
+	function view_order_details_get(){
+		$temp=$this->branch_model->view_order_details($this->get('id'),$this->get('cust'));
+		$data['order_num']=$temp[0];
+		$data['trusted_cust']=$temp[1];
+		$data['record']=$temp[2];
+		$this->load->view('branch/order_viewer',$data);
+	}
+	function trust_him_get()
+	{
+		$data['trusted_cust']=$this->branch_model->trust_him($this->get('id'));
+		$data['cid']=$this->get('id');
+		$this->load->view('branch/mycustomer',$data);
+	}
+	function untrust_him_get()
+	{
+		$data['trusted_cust']=$this->branch_model->untrust_him($this->get('id'));
+		$data['cid']=$this->get('id');
+		$this->load->view('branch/mycustomer',$data);
 	}
 }

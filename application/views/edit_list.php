@@ -56,16 +56,21 @@ xmlhttp.open("GET",base_url+controller+"/delete_meal/id/"+<?php echo $this->sess
   }
 }
 </script>
-<div class="row" > 
+<div class="row" style="direction: rtl;"> 
   <div class="col-lg-12">
 						<div class="panel panel-primary" >
 							<center>
 								<div class="panel-body" style="width : 90%">
 									
 										<div class="row">
+											 
 											 <div class="col-lg-6">
+											<input type="hidden" value="<?php echo $this->session->userdata('res_id');?>" name='id'>
+											<button type="submit" onclick="move_it()"  class="btn btn-info" style="margin-top :25px ">إظهار جميع الوجبات في هذه القائمة</button>
+											</div>	
+											<div class="col-lg-6">
 											  <div class="form-group">
-													<label >Meal Type</label>
+													<label >قائمة الطعام</label>
 													<select class="form-control chzn-select" name="meal_list" id="meal_list">
 														<?php if(isset($record1)&&is_array($record1)):?>
 														<?php foreach ($record1 as $rows):?>
@@ -75,11 +80,6 @@ xmlhttp.open("GET",base_url+controller+"/delete_meal/id/"+<?php echo $this->sess
 													</select>
 												</div>
 											 </div>
-											 <div class="col-lg-6">
-											<input type="hidden" value="<?php echo $this->session->userdata('res_id');?>" name='id'>
-											<button type="submit" onclick="move_it()"  class="btn btn-info" style="margin-top :25px ">Show ALL This Tab Meals </button>
-											</div>	
-											
 										</div>	
 						
 								</div>
@@ -88,43 +88,15 @@ xmlhttp.open("GET",base_url+controller+"/delete_meal/id/"+<?php echo $this->sess
                </center>         
 	</div>
 </div>
-  <div class="row">			
-<div class="col-lg-6">
-<h1>Meals Recorded in This Tab</h1>
-<div class="table-responsive" >
-										<table class="table table-bordered table-hover table-striped" style="text-align: center;">
-											<thead>
-												<tr>
-													<th >Meal Name</th>
-													<th >Meal Description</th>
-													<th ></th>
-												</tr>
-											</thead>
-											<tbody>	
-											<?php if(isset($record) && is_array($record)):?>
-											<?php foreach($record as $row):?>
-											<tr>								
-												<td><?php echo $row->name;?></td>
-												<td><?php echo $row->description;?></td>
-												<td><input type="button" class="btn btn-info" onclick="view_details(<?php echo  $row->id ;?>)" value="View">
-												<input type="button" class="btn btn-danger" onclick="delete_res(<?php echo $row->id ;?>)" value="Delete">
-												</td>												
-											</tr>
-											<?php endforeach;?>
-											<?php endif; ?>
-										</tbody>
-</table>
-<?php echo $this->pagination->create_links(); ?>
-</div>
-</div>
+  <div class="row" style="direction: rtl;">			
   <div class="col-lg-6">
   <h1>
-                        Meals Control Panel
+                        لوحة التحكم بالوجبات
                         </h1>
 						<div  id="itemform" > 
 						<div class="panel panel-primary" >
                             <div class="panel-heading">
-                                <h3 class="panel-title">Show Meals Details</h3>
+                                <h3 class="panel-title">إظهار تفاصيل الوجبة</h3>
                             </div>
 							<center>
 								<div class="panel-body" style="width : 90%">
@@ -140,5 +112,33 @@ xmlhttp.open("GET",base_url+controller+"/delete_meal/id/"+<?php echo $this->sess
 							</center>
 							</div>
                        </div> 
-	</div>	
+	</div>
+<div class="col-lg-6">
+<h1>الوجبات المضافة لدي</h1>
+<div class="table-responsive" >
+										<table class="table table-bordered table-hover table-striped" style="text-align:right;">
+											<thead>
+												<tr>
+													<th style="text-align:right;">اسم الوجبة</th>
+													<th style="text-align:right;">وصف الوجبة</th>
+													<th style="text-align:right;"></th>
+												</tr>
+											</thead>
+											<tbody>	
+											<?php if(isset($record) && is_array($record)):?>
+											<?php foreach($record as $row):?>
+											<tr>								
+												<td><?php echo $row->name;?></td>
+												<td><?php echo $row->details;?></td>
+												<td><input type="button" class="btn btn-info" onclick="view_details(<?php echo  $row->r_id ;?>)" value="عرض">
+												<input type="button" class="btn btn-danger" onclick="delete_res(<?php echo $row->r_id ;?>)" value="حذف">
+												</td>												
+											</tr>
+											<?php endforeach;?>
+											<?php endif; ?>
+										</tbody>
+</table>
+<?php echo $this->pagination->create_links(); ?>
+</div>
+</div>	
 </div>
