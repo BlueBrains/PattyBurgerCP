@@ -84,20 +84,48 @@ class Res_model extends CI_Model
 		}
 	}
 
-	function order($res_id,$user_id,$order)
-	{
-		$sql=$this->db->query("SELECT * FROM meal where meal.ID = '".$id_meal."'");
-		foreach ($sql->result() as $raw ) {
-			$data[]=$raw;
+	function get_last_orderId(){
+		$sql=$this->db->query("SELECT id as lastId FROM orders ORDER BY id DESC LIMIT 1;"); //temporary solution beacaue of high cost ! 
+		if ($sql->num_rows > 0){
+			return $sql->row()->lastId;
 		}
-		$re['meal']=$data;
-		if ($sql->num_rows > 0){ 
-			 return $re; 
+		else{
+			return 0;
 		}
-		else {
-			$f=FALSE;	
-			return $f;
-		}		
 	}
+
+	function get_last_meals_orderId(){
+		$sql=$this->db->query("SELECT id as lastId FROM meals_order ORDER BY id DESC LIMIT 1;"); //temporary solution beacaue of high cost ! 
+		if ($sql->num_rows > 0){
+			return $sql->row()->lastId;
+		}
+		else{
+			return 0;
+		}
+	}
+
+
+	function insert_order($user_id,$res_id,$order)
+	{
+		//sample.1. [{"res_meal":1,"spec":[{"id":1,"value":0},{"id":10,"value":1}]},{"res_meal":2,"spec":[{"id":1,"value":0}]}]		
+		//sample.2. [{"res_meal":1,"spec":[{"id":1,"value":0},{"id":10,"value":1}]},{"res_meal":2}]
+		$order_id = $this->get_last_orderId() + 1;
+		$sql=$this->db->query("INSERT INTO orders (cust_id,branch_id)
+							   VALUES ('".$user_id."','".$res_id."')");
+		$result = json_decode($order);
+		foreach ($result as $meal){
+			$sql=$this->db->query("INSERT INTO meals_order (orders_id,res_meal_id)
+								   VALUES ('".$order_id."','".$meal->res_meal."')");
+			//if there is no spec json will have no spec key like [{"res_meal":1},{"res_meal":2}]
+			if (isset($meal->spec)){
+				$meal_order_id = $this->get_last_meals_orderId();
+				foreach ($meal->spec as $spec){
+					$sql=$this->db->query("INSERT INTO orders_meals_spec(meals_order_id,spec_id,value)
+								   		   VALUES ('".$meal_order_id."','".$spec->id."','".$spec->value."')");
+				}
+			}
+		}
+	}
+
 }
 ?>
