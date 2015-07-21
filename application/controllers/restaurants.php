@@ -81,11 +81,32 @@ class Restaurants extends REST_Controller
             }
         }
     }
+
+    function test_post()
+    {  
+        $order = $this->post('order'); 
+        $result = $this->res_model->test($order);
+        $message = array('order' => $this->post('order'), 'message' => 'ADDED!');
+        $this->response($message, 200); // 200 being the HTTP response code
+    }
     
+    function order_post()
+    {  
+        $input_data = json_decode(trim(file_get_contents('php://input')));
+        $user_id = $input_data->user_id; 
+        $res_id = $input_data->res_id; 
+        $order = $input_data->order;
+        $result = $this->res_model->insert_order($user_id,$res_id,$order);
+        $message = array('id' => $this->post('user_id'), 'name' => $this->post('res_id'), 'order' => $this->post('order'), 'message' => 'Order ADDED!');
+        $this->response($message, 200); // 200 being the HTTP response code
+    }
 
     /*function order_post()
     {  
-        
+        $input_data = json_decode(trim(file_get_contents('php://input')));
+        $user_id = $input_data->user_id; 
+        $res_id = $input_data->res_id; 
+        //$order = $input_data->order[0]->item_id;         
         $result = $this->res_model->order($res_id,$user_id,$order);
         if ($result == )
             $message = array('id' => $this->get('id'), 'name' => $this->post('name'), 'message' => 'ADDED!');
