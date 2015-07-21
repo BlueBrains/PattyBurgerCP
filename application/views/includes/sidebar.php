@@ -115,6 +115,17 @@
                 <li><a href="<?php echo base_url()?>rest_admin/delieverd_request"><i class="fa fa-circle-o text-green"></i>Delivered Requests<span class="label label-success pull-right">3</span></a></li>
               </ul>
             </li>
+			<li class="treeview">
+              <a href="#">
+                <i class="fa fa-money"></i>
+                <span>مهام التوصيل</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="<?php echo base_url()?>rest_admin/all_delievry_tasks  "><i class="fa fa-circle-o text-aqua"></i>جميع مهمات التوصيل<span class="label label-info pull-right">12</span></a></li>
+                <li><a href="<?php echo base_url()?>rest_admin/ready_to_deliever"><i class="fa fa-circle-o text-red"></i>طلبات بانتظار التوصيل<span class="label label-danger pull-right">2</span></a></li>
+              </ul>
+            </li>
 			<?php endif; ?>
           </ul>
         </section>

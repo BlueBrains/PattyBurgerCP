@@ -1,3 +1,11 @@
+<?php
+	$sum=0;
+	if(isset($record) && is_array($record))
+		foreach($record as $r)
+			$sum +=$r->num;
+	if(!isset($sum))
+		$sum=0;
+?>
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 
@@ -90,7 +98,7 @@
                     <tbody ><tr>
                       <th style="width: 10px;text-align: right;">#</th>
                       <th style="text-align: right;">عنوان الفرع</th>
-                      <th style="text-align: right;">الضغط على الفرع</th>
+                      <th style="text-align: right;width: 50%;">الضغط على الفرع</th>
                       <th style="width: 40px" style="text-align: right;">رقما</th>
                     </tr>
 					
@@ -100,10 +108,35 @@
                       <td><?php echo $rows->address?></td>
                       <td >
                         <div class="progress progress-xs">
-                          <div class="progress-bar progress-bar-danger" style="width: 55%;float: right;"></div>
+							<?php 
+							      if($sum==0){ 
+								    $res=0;
+									$class="progress-bar progress-bar-danger";
+									}
+								  else{
+									$res=$rows->num/$sum;
+									$res=round($res*100);
+									if($res>65)
+										{
+											$class="progress-bar progress-bar-success";
+											$sclass="badge bg-green";
+										}
+									else if ($res>40){
+										$class="progress-bar progress-bar-warning";
+										$sclass="badge bg-yellow";
+										}
+										
+									else {
+										$class="progress-bar progress-bar-danger";
+										$sclass="badge bg-red";
+										}
+									
+								  } 
+							?>
+							<div class="<?php echo $class?>" style="width: <?php echo $res;?>%;float: right;"></div>
                         </div>
                       </td>
-                      <td><span class="badge bg-red">55%</span></td>
+                      <td><span class="<?php echo $sclass?>"><?php echo $res;?>%</span></td>
                     </tr>
                    <?php endforeach; ?>
 				    </tbody>

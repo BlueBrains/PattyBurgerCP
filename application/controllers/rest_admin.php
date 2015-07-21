@@ -5,7 +5,7 @@ class rest_admin extends REST_Controller {
 		parent::__construct();
 		$this->load->library('session');
 		
-		if($this->session->userdata('logged_in')&&($this->session->userdata('role')>1)){
+		if($this->session->userdata('logged_in')&&($this->session->userdata('role')>1)&&($this->session->userdata('role')!=3)){
 			$this->load->library('pagination');
 			$this->load->model('branch_model');
 			 header('Content-Type: text/html; charset=utf-8');
@@ -24,7 +24,7 @@ class rest_admin extends REST_Controller {
 			$data['logo']=$temp['logo'];
 			$data['worker_number']=$this->branch_model->worker_number($this->session->userdata('res_id'));
 			$data['b_num']=$this->branch_model->branch_number($this->session->userdata('res_id'));
-			$data['record'] =$this->branch_model->get_myres($this->session->userdata('res_id'));
+			$data['record'] =$this->branch_model->get_myres($this->session->userdata('res_id'),1);
 			$data['main_content'] = 'branch/homepage';	
 			$this->load->view('includes/template',$data);}
 		else 
@@ -392,5 +392,46 @@ class rest_admin extends REST_Controller {
 		$data['trusted_cust']=$this->branch_model->untrust_him($this->get('id'));
 		$data['cid']=$this->get('id');
 		$this->load->view('branch/mycustomer',$data);
+	}
+	
+	function all_delievry_tasks_get(){
+		
+		$data['record']=$this->branch_model->all_delievry_tasks();
+			$data['main_content'] = 'branch/delievry_tasks';
+			$this->load->view('includes/template',$data);
+	}
+	
+	function ready_to_deliever_get(){
+		$t=$this->branch_model->ready_to_deliever(0);
+		$data['record']=$t[1];
+		$data['all']=$t[2];
+		$data['rec']=$this->branch_model->my_deliever_boys();
+		$data['main_content'] = 'branch/ready_to_deliever';
+		$this->load->view('includes/template',$data);
+	}
+	
+	function more_to_deliever_get(){
+	
+		$offset=$this->get('offset');
+		if(!isset($offset)||(strlen($offset)==0)){
+			$offset=0;
+		}
+		$data['record']=$this->branch_model->ready_to_deliever($offset);
+		$this->load->view('branch/more_orders',$data);
+	}
+	
+	function assign_task_post(){
+		$this->branch_model->assign_task();
+		redirect('rest_admin/ready_to_deliever');
+	}
+	
+	function view_task_details_get(){
+		$data['record']=$this->branch_model->view_task_details($this->get('id'));
+		$this->load->view('branch/task_viewer',$data);
+	}
+	
+	function view_road_get(){
+		$data['record']=$this->branch_model->view_road($this->get('id'));
+		$this->load->view('branch/task_viewer',$data);
 	}
 }

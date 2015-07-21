@@ -221,7 +221,9 @@ xmlhttp.open("GET",base_url+controller+"/untrust_him/id/"+str,true);
 										class="btn bg-olive margin" value="الطلب منتهي"
 									<?php endif;?>	
 									>
-									<input type="button" class="btn btn-danger" onclick="delete_order(<?php echo $rows->id ;?>)" value="إلغاء الطلب">
+									<?php if($rows->order_status!=4):?>
+										<input type="button" class="btn btn-danger" onclick="delete_order(<?php echo $rows->id ;?>)" value="إلغاء الطلب">
+									<?php endif;?>		
 								<?php else:?>
 									<button class="btn bg-maroon margin">الطلب ملغى</button>
 									 <button onclick="block_cust(<?php echo $rows->cid ;?>)" class="btn bg-navy margin">حظر الزبون</button>

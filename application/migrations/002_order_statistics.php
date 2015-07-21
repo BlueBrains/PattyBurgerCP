@@ -46,7 +46,7 @@ class Migration_order_statistics extends CI_Migration{
 			'delivery' => array(
 				'type'=>'boolean',
 			),
-			'delivery_boy_id' => array(
+			'delivery_task_id' => array(
 				'type'=>'int',
 				'constraint'=>11
 			),
