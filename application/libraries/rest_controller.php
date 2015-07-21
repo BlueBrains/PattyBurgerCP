@@ -9,8 +9,8 @@
  * @subpackage    	Libraries
  * @category    	Libraries
  * @author        	Phil Sturgeon, Chris Kacerguis
- * @license         http://philsturgeon.co.uk/code/dbad-license
- * @link			https://github.com/philsturgeon/codeigniter-restserver
+ * @license         MIT
+ * @link			https://github.com/chriskacerguis/codeigniter-restserver
  * @version         3.0.0-pre
  */
 abstract class REST_Controller extends CI_Controller
@@ -192,7 +192,7 @@ abstract class REST_Controller extends CI_Controller
      * Constructor function
      * @todo Document more please.
      */
-    public function __construct()
+    public function __construct($config = 'rest')
     {
         parent::__construct();
 
@@ -200,13 +200,12 @@ abstract class REST_Controller extends CI_Controller
         $this->_start_rtime = microtime(true);
 
         // Lets grab the config and get ready to party
-        $this->load->config('rest');
+        $this->load->config($config);
 
         // This library is bundled with REST_Controller 2.5+, but will eventually be part of CodeIgniter itself
         $this->load->library('format');
 
         // init objects
-        $this->request      = new stdClass();
         $this->response     = new stdClass();
         $this->rest         = new stdClass();
 
@@ -287,7 +286,7 @@ abstract class REST_Controller extends CI_Controller
         $this->auth_override    = $this->_auth_override_check();
 
         // Checking for keys? GET TO WorK!
-		// Skip keys test for $config['auth_override_class_method']['class'['method'] = 'none'
+	// Skip keys test for $config['auth_override_class_method']['class'['method'] = 'none'
         if (config_item('rest_enable_keys') and $this->auth_override !== true) {
             $this->_allow = $this->_detect_api_key();
         }
@@ -369,7 +368,7 @@ abstract class REST_Controller extends CI_Controller
             if (config_item('rest_enable_logging') and $log_method) {
                 $this->_log_request();
             }
-            
+
             $this->response(array(config_item('rest_status_field_name') => false, config_item('rest_message_field_name') => 'Invalid API Key '.$this->rest->key), 403);
         }
 
@@ -445,8 +444,6 @@ abstract class REST_Controller extends CI_Controller
      */
     public function response($data = null, $http_code = null, $continue = false)
     {
-        global $CFG;
-
         // If data is null and not code provide, error and bail
         if ($data === null && $http_code === null) {
             $http_code = 404;
@@ -463,7 +460,7 @@ abstract class REST_Controller extends CI_Controller
         // Otherwise (if no data but 200 provided) or some data, carry on camping!
         else {
             // Is compression requested?
-            if ($CFG->item('compress_output') === true && $this->_zlib_oc == false) {
+            if ($this->config->item('compress_output') === true && $this->_zlib_oc == false) {
                 if (extension_loaded('zlib')) {
                     if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) and strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false) {
                         ob_start('ob_gzhandler');
@@ -502,7 +499,7 @@ abstract class REST_Controller extends CI_Controller
         // but it will not modify the content-length header to compensate for
         // the reduction, causing the browser to hang waiting for more data.
         // We'll just skip content-length in those cases.
-        if ( ! $this->_zlib_oc && ! $CFG->item('compress_output')) {
+        if ( ! $this->_zlib_oc && ! $this->config->item('compress_output')) {
             header('Content-Length: ' . strlen($output));
         }
 
@@ -523,7 +520,9 @@ abstract class REST_Controller extends CI_Controller
      */
     protected function _detect_ssl()
     {
-            return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on");
+    	    // $_SERVER['HTTPS'] (http://php.net/manual/en/reserved.variables.server.php)
+    	    // Set to a non-empty value if the script was queried through the HTTPS protocol
+            return (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']));
     }
 
 
@@ -569,6 +568,7 @@ abstract class REST_Controller extends CI_Controller
 
         // Check if a file extension is used
         elseif ($this->_get_args and !is_array(end($this->_get_args)) and preg_match($pattern, end($this->_get_args), $matches)) {
+        //elseif ($this->_get_args and !is_array(end($this->_get_args)) and preg_match($pattern, end(array_keys($this->_get_args)), $matches)) {
             // The key of the last argument
             $last_key = end(array_keys($this->_get_args));
 
@@ -795,8 +795,8 @@ abstract class REST_Controller extends CI_Controller
                 ->get(config_item('rest_limits_table'))
                 ->row();
 
-        // No calls yet, or been an hour since they called
-        if ( ! $result or $result->hour_started < time() - (60 * 60)) {
+        // No calls yet for this key
+        if ( ! $result ) {
             // Right, set one up from scratch
             $this->rest->db->insert(config_item('rest_limits_table'), array(
                 'uri' => $this->uri->uri_string(),
@@ -804,6 +804,17 @@ abstract class REST_Controller extends CI_Controller
                 'count' => 1,
                 'hour_started' => time()
             ));
+        }
+
+        // Been an hour since they called
+        else if ($result->hour_started < time() - (60 * 60)) {
+            // Reset the started period
+            $this->rest->db
+                    ->where('uri', $this->uri->uri_string())
+                    ->where('api_key', isset($this->rest->key) ? $this->rest->key : '')
+                    ->set('hour_started', time())
+                    ->set('count', 1)
+                    ->update(config_item('rest_limits_table'));
         }
 
         // They have called within the hour, so lets update
@@ -840,6 +851,36 @@ abstract class REST_Controller extends CI_Controller
         // Check to see if the override array is even populated, otherwise return false
         if (empty($this->overrides_array)) {
             return false;
+        }
+
+        // check for wildcard flag for rules for classes
+        if(!empty($this->overrides_array[$this->router->class]['*'])){//check for class overides
+            // None auth override found, prepare nothing but send back a true override flag
+            if ($this->overrides_array[$this->router->class]['*'] == 'none')
+            {
+                return true;
+            }
+
+            // Basic auth override found, prepare basic
+            if ($this->overrides_array[$this->router->class]['*'] == 'basic')
+            {
+                $this->_prepare_basic_auth();
+                return true;
+            }
+
+            // Digest auth override found, prepare digest
+            if ($this->overrides_array[$this->router->class]['*'] == 'digest')
+            {
+                $this->_prepare_digest_auth();
+                return true;
+            }
+
+            // Whitelist auth override found, check client's ip against config whitelist
+            if ($this->overrides_array[$this->router->class]['*'] == 'whitelist')
+            {
+                $this->_check_whitelist_auth();
+                return true;
+            }
         }
 
         // Check to see if there's an override value set for the current class/method being called
@@ -1154,7 +1195,7 @@ abstract class REST_Controller extends CI_Controller
 
             log_message('debug', 'Setting timeout to ' . $ldaptimeout . ' seconds');
 
-            ldap_set_option($ldapconn, LDAP_OPT_NETWorK_TIMEOUT, $ldaptimeout);
+            ldap_set_option($ldapconn, LDAP_OPT_NETWORK_TIMEOUT, $ldaptimeout);
 
             log_message('debug', 'LDAP Auth: Binding to ' . $ldaphost . ' with dn ' . $ldaprdn);
 
@@ -1222,33 +1263,28 @@ abstract class REST_Controller extends CI_Controller
     protected function _perform_library_auth($username = '', $password = null)
     {
         if (empty($username)) {
-            log_message('debug', 'Library Auth: failure, empty username');
-
+            log_message('error', 'Library Auth: failure, empty username');
             return false;
         }
 
-        $auth_library_class = strtolower($this->config->item('auth_library_class'));
-        $auth_library_function = strtolower($this->config->item('auth_library_function'));
+        $auth_library_class     = strtolower($this->config->item('auth_library_class'));
+        $auth_library_function  = strtolower($this->config->item('auth_library_function'));
 
         if (empty($auth_library_class)) {
             log_message('debug', 'Library Auth: failure, empty auth_library_class');
-
             return false;
         }
 
         if (empty($auth_library_function)) {
             log_message('debug', 'Library Auth: failure, empty auth_library_function');
-
             return false;
         }
 
-        if (!is_callable(array($this->$auth_library_class, $auth_library_function))) {
-
+        if (!is_callable(array($auth_library_class, $auth_library_function))) {
             $this->load->library($auth_library_class);
-
         }
 
-        return $this->$auth_library_class->$auth_library_function($username, $password);
+        return $this->{$auth_library_class}->$auth_library_function($username, $password);
     }
 
     /**
@@ -1258,13 +1294,23 @@ abstract class REST_Controller extends CI_Controller
      * @param  string  $password The user's password
      * @return boolean
      */
-    protected function _check_login($username = '', $password = null)
+    protected function _check_login($username = '', $password = false)
     {
         if (empty($username)) {
             return false;
         }
 
         $auth_source = strtolower($this->config->item('auth_source'));
+        $rest_auth = strtolower($this->config->item('rest_auth'));
+        $valid_logins = $this->config->item('rest_valid_logins');
+
+        if (!$this->config->item('auth_source') && $rest_auth == 'digest') { // for digest we do not have a password passed as argument
+            return md5($username.':'.$this->config->item('rest_realm').':'.(isset($valid_logins[$username])?$valid_logins[$username]:''));
+        }
+
+        if ($password === false) {
+            return false;
+        }
 
         if ($auth_source == 'ldap') {
             log_message('debug', 'performing LDAP authentication for $username');
@@ -1278,14 +1324,11 @@ abstract class REST_Controller extends CI_Controller
             return $this->_perform_library_auth($username, $password);
         }
 
-        $valid_logins = $this->config->item('rest_valid_logins');
-
-        if ( ! array_key_exists($username, $valid_logins)) {
+        if (!array_key_exists($username, $valid_logins)) {
             return false;
         }
 
-        // If actually null (not empty string) then do not check it
-        if ($password === null and $valid_logins[$username] != $password) {
+        if ($valid_logins[$username] != $password) {
             return false;
         }
 
@@ -1366,20 +1409,17 @@ abstract class REST_Controller extends CI_Controller
         preg_match_all('@(username|nonce|uri|nc|cnonce|qop|response)=[\'"]?([^\'",]+)@', $digest_string, $matches);
         $digest = (empty($matches[1]) || empty($matches[2])) ? array() : array_combine($matches[1], $matches[2]);
 
-        if ( ! array_key_exists('username', $digest) or !$this->_check_login($digest['username'])) {
+        // For digest authentication the library function should return already stored md5(username:restrealm:password) for that username @see rest.php::auth_library_function config
+        $A1 = $this->_check_login($digest['username'], true);
+        if ( ! array_key_exists('username', $digest) or ! $A1 ) {
             $this->_force_login($uniqid);
         }
 
-        $valid_logins = $this->config->item('rest_valid_logins');
-        $valid_pass = $valid_logins[$digest['username']];
-
-        // This is the valid response expected
-        $A1 = md5($digest['username'].':'.$this->config->item('rest_realm').':'.$valid_pass);
         $A2 = md5(strtoupper($this->request->method).':'.$digest['uri']);
         $valid_response = md5($A1.':'.$digest['nonce'].':'.$digest['nc'].':'.$digest['cnonce'].':'.$digest['qop'].':'.$A2);
 
         if ($digest['response'] != $valid_response) {
-            set_status_header(401);
+            $this->response(array(config_item('rest_status_field_name') => 0, config_item('rest_message_field_name') => 'Invalid credentials'), 401);
             exit;
         }
     }
@@ -1476,11 +1516,16 @@ abstract class REST_Controller extends CI_Controller
             return true;
         }
 
-        $controller = explode('/', $this->uri->uri_string());
+        // Fetch controller based on path and controller name
+        $controller = implode( '/', array($this->router->fetch_directory(), $this->router->fetch_class()) );
 
+        // Remove any double slashes for safety
+        $controller = str_replace('//', '/', $controller);
+
+        // Build access table query
         $this->rest->db->select();
         $this->rest->db->where('key', $this->rest->key);
-        $this->rest->db->where('controller', $controller[0]);
+        $this->rest->db->where('controller', $controller);
 
         $query = $this->rest->db->get(config_item('rest_access_table'));
 
